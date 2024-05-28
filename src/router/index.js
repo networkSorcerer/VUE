@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard.vue';
 import Notice from '../views/system/Notice';
 import SamplePage5 from '@/views/sampletest/SamplePage5.vue';
 import LectureHandle from '@/views/sampletest/sampletest5/LectureHandle.vue';
+import StuHandle from '@/views/sampletest/sampletest7/StuHandle.vue';
 
 const routes = [
     {
@@ -51,6 +52,23 @@ const routes = [
                     {
                         path: 'write',
                         component:<LectureHandle/>,
+                    }
+                ],
+            },
+            {
+                path: 'sampletest',
+                children: [
+                    {
+                        path: 'samplepage7',
+                        component: <SmaplePage7/>,
+                    },
+                    {
+                        path:'detail/:id',
+                        component: <StuHandle/>,
+                    },
+                    {
+                        path: 'write',
+                        component:<StuHandle/>,
                     }
                 ],
             },
