@@ -1,9 +1,9 @@
 <template>
-    <StuList></StuList>
+    <LecList></LecList>
 </template>
 
 <script setup>
-import StuList from './sampletest7/StuList';
+import LecList from './sampletest7/LecList';
 </script>
 
 <style></style>

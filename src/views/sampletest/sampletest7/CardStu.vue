@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-4">
+    <div class="col-sm-4"> 왜 안나와
         <div class="card" style="min-height: 150px">
             <div class="card-body">
                 <h5 class="card-title" style="text-align: center">{{ data.lec_id }}</h5>
@@ -15,7 +15,7 @@
         data: Object,
     });
 </script>
-
+s
 <style>
 .col-sm-4 {
     margin-bottom: 10px;

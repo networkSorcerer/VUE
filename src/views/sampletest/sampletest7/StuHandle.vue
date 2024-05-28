@@ -59,7 +59,7 @@ import EquipmentList from './EquipmentList.vue';
 
     const route = useRoute();
     const id = ref(route.params.id);
-    const lec = reactive({ lec_id: '', lec_name: '', start_date: '', end_date:''});
+    const lec = reactive({ lec_id: 0, lec_name: ''});
     const router =useRouter();
 
     const updateHandler = ref(id.value ? 'U' : 'I');
