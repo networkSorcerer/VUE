@@ -59,7 +59,7 @@ import EquipmentList from './EquipmentList.vue';
 
     const route = useRoute();
     const id = ref(route.params.id);
-    const lecture = reactive({ lecrm_name: '', lecrm_size: 0, lecrm_snum: 0, lecrm_note:''});
+    const lec = reactive({ lec_id: '', lec_name: '', start_date: '', end_date:''});
     const router =useRouter();
 
     const updateHandler = ref(id.value ? 'U' : 'I');
@@ -69,24 +69,24 @@ import EquipmentList from './EquipmentList.vue';
         let param = new  URLSearchParams();
         param.append('lecrm_id', id);
 
-        axios.post('/adm/lectureRoomDtl.do', param).then((res) =>{
-            lecture.lecrm_name = res.data.selinfo.lecrm_name;
-            lecture.lecrm_size = res.data.selinfo.lecrm_size;
-            lecture.lecrm_snum = res.data.selinfo.lecrm_snum;
-            lecture.lecrm_note = res.data.selinfo.lecrm_note;
-            preLecture ={...lecture}
+        axios.post('/adm/plist_lec.do', param).then((res) =>{
+            lec.lecrm_name = res.data.selinfo.lec_id;
+            lec.lecrm_size = res.data.selinfo.lec_name;
+            lec.lecrm_snum = res.data.selinfo.start_date;
+            lec.lecrm_note = res.data.selinfo.end_date;
+            preLecture ={...lec}
         });
     };
 
     const postLectureDetail = () => {
         let checkresult = nullcheck([
-        { inval: lecture.lecrm_name, msg: '강의실 명을 입력해 주세요.' },
-        { inval: lecture.lecrm_size, msg: '강의실 크기을 입력해 주세요.' },
-        { inval: lecture.lecrm_snum, msg: '강의실 자리수을 입력해 주세요.' },
+        { inval: lec.lec_id, msg: '강의실 명을 입력해 주세요.' },
+        { inval: lec.lec_name, msg: '강의실 크기을 입력해 주세요.' },
+        { inval: lec.lecrm_snum, msg: '강의실 자리수을 입력해 주세요.' },
     ]);
     if (!checkresult) return;
 
-    let param = new URLSearchParams(lecture);
+    let param = new URLSearchParams(lec);
     param.append('action', updateHandler.value);
     param.append('lecrm_id', id.value);
     id.value? param.append('lecrm_id', id.value) : null;
@@ -115,10 +115,10 @@ import EquipmentList from './EquipmentList.vue';
             });
     }
 
-    watch (lecture, (newData) => {
-        if(newData.lecrm_name.length > 15) {
+    watch (lec, (newData) => {
+        if(newData.lec_name.length > 15) {
             alert('15자 이상입니다.');
-            lecture.lecrm_name = preLecture.lecrm_name;
+            lec.lec_name = preLecture.lec_name;
         }
     })
     onMounted(() => {

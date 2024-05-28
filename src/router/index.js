@@ -4,7 +4,12 @@ import Dashboard from '../views/Dashboard.vue';
 import Notice from '../views/system/Notice';
 import SamplePage5 from '@/views/sampletest/SamplePage5.vue';
 import LectureHandle from '@/views/sampletest/sampletest5/LectureHandle.vue';
+import SamplePage7 from '@/views/sampletest/SamplePage7.vue';
 import StuHandle from '@/views/sampletest/sampletest7/StuHandle.vue';
+import SamplePage8 from '@/views/sampletest/SamplePage8.vue';
+import TuHandle from '@/views/sampletest/sampletest8/TuHandle.vue';
+
+
 
 const routes = [
     {
@@ -52,15 +57,10 @@ const routes = [
                     {
                         path: 'write',
                         component:<LectureHandle/>,
-                    }
-                ],
-            },
-            {
-                path: 'sampletest',
-                children: [
+                    },
                     {
                         path: 'samplepage7',
-                        component: <SmaplePage7/>,
+                        component: <SamplePage7 />,
                     },
                     {
                         path:'detail/:id',
@@ -69,6 +69,18 @@ const routes = [
                     {
                         path: 'write',
                         component:<StuHandle/>,
+                    },
+                    {
+                        path: 'samplepage8',
+                        component: <SamplePage8 />,
+                    },
+                    {
+                        path:'detail/:id',
+                        component: <TuHandle/>,
+                    },
+                    {
+                        path: 'write',
+                        component:<TuuHandle/>,
                     }
                 ],
             },
