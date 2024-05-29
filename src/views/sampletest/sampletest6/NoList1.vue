@@ -1,9 +1,9 @@
-<template>
-  <div id="notice">
-    <p class="Location">
-      <a href="/dashboard/home" class="btn_set home"></a>
-      <span class="btn_nav bold">기준정보</span>
-      <span class="btn_nav bold">공지사항 관리</span>
+<template>이거 왜 안나옴 
+  <div id="">
+      <p class="Location">
+          <a href="/dashboard/home" class="btn_set home"></a>
+          <span class="btn_nav bold">기준정보</span>
+          <span class="btn_nav bold">공지사항 관리</span>
     </p>
     <p class="conTitle">
       <span>공지사항</span>
@@ -68,7 +68,7 @@
               </tr>
           </thead>
           <tbody>
-            <template v-if="NoticeList.lencth <= 0">
+            <template v-if="NoticeList.length <= 0">
               <tr>
                 <td colspan="7">일치하는 검색 결과가 없습니다</td>
               </tr>
@@ -85,31 +85,32 @@
       </table>
       <Pagination/>
     </div>
-    <NoticeModal />
+    <NoModal /> 
   </div>
+  
 </template>
 
 <script>
 import axios from 'axios';
 import Pagination from '@/components/common/PaginationComponent.vue';
-import NoticeModal from '@/views/system/notice/NoticeModal.vue';
+import NoModal from './NoModal.vue';
 
 
 export default {
   data() {
     return {
       noticeList : [],
-      paramObj: { searchtitle: '', searchdata: '', searcheddate: ''},
+      paramObj: { searchtitle: '', searchstdate: '', searcheddate: ''},
       totCnt: 0,
       currentPage: 0,
-      ModalState: false,
+      modalState: false,
       modalProps: 0,
     };
   },
-  components: { Pagination, NoticeModal},
+  components: { Pagination, NoModal},
   methods: {
     getNoticeList(cpage) {
-      if(this.paramObj.searchdate > this.paramObj.searchdate) {
+      if(this.paramObj.searchstdate > this.paramObj.searcheddate) {
         alert('시작일이 더 크면 안돼요.');
         return;
       }
@@ -135,7 +136,6 @@ export default {
 }
 </script>
 
-<sty
-Noticele>
+<style>
 
 </style>
