@@ -80,8 +80,20 @@ const routes = [
                     },
                     {
                         path: 'write',
-                        component:<TuuHandle/>,
-                    }
+                        component:<TuHandle/>,
+                    },
+                    {
+                        path: 'samplepage9',
+                        component: <SamplePage9 />,
+                    },
+                    {
+                        path:'detail/:id',
+                        component: <TuHandle/>,
+                    },
+                    {
+                        path: 'write',
+                        component:<TuHandle/>,
+                    },
                 ],
             },
         ],

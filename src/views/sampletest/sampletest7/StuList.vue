@@ -1,17 +1,27 @@
 <template>
   <div>
-    <div>하하하
-        <h5>{{ data.name }}</h5>
-        <p>{{ data.std_num }}</p>
-    </div>
-    <Pagination/>
+    <table>
+        <tr>
+            <td>학번</td>
+            <td>수강강의</td>
+            <td>학생 명</td>
+            <td>휴대전화</td>
+            <td>가입일자</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+    </table>
   </div>
 </template>
 
 <script setup>
 
 import { onMounted, ref } from 'vue';
-import Pagination from '@/components/common/PaginationComponent.vue';
 import { SamplePage7 } from '@/api/api';
 import {axiosAction} from '.';
 
@@ -24,7 +34,7 @@ const currentPage = ref(1);
 const searchLecture = async (cpage) => {
     cpage = cpage || 1;
     let param = new URLSearchParams();
-    param.append('cpage', cpage);
+    param.append('currentPage', cpage);
     param.append('pagesize', 6);
 
 

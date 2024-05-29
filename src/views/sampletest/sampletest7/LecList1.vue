@@ -1,31 +1,28 @@
 <template>
     <form id="myForm" action="" method="">
+        <!-- Hidden fields -->
         <input type="hidden" id="currentPage_lec" value="1"> 
         <input type="hidden" id="currentPage_std" value="1"> 
         <input type="hidden" id="tmp_lec" value=""> 
         <input type="hidden" id="tmp_user" name="loginID" value=""> 
         <input type="hidden" name="action" id="action" value="">
 
-        <!-- 모달 배경 -->
+        <!-- Modal background -->
         <div id="mask"></div>
 
         <div id="wrap_area">
-
             <h2 class="hidden">header 영역</h2>
-            <!-- 헤더 영역 컴포넌트를 import하고 사용 -->
             <HeaderComponent />
 
             <h2 class="hidden">컨텐츠 영역</h2>
             <div id="container">
                 <ul>
                     <li class="lnb">
-                        <!-- lnb 영역 컴포넌트를 import하고 사용 --> 
                         <LnbMenuComponent />
                     </li>
                     <li class="contents">
                         <h3 class="hidden">contents 영역</h3>
                         <div class="content">
-
                             <p class="Location">
                                 <router-link to="/notice/aNotice.do" class="btn_set home">메인으로</router-link>
                                 <router-link to="" class="btn_nav">인원 관리</router-link>
@@ -43,7 +40,7 @@
                             </p>
 
                             <!-- 강의 리스트 -->
-                            <div class="lectureList" id="lectureList">
+                            <div class="lectureList" id="lectureList" v-if="dataList.length">
                                 <table class="col">
                                     <caption>caption</caption>
                                     <colgroup>
@@ -59,15 +56,16 @@
                                         </tr>
                                     </thead>
                                     <tbody id="lecList">
-                                        <tr v-for="data in dataList" :key="data.lec_id" :data="data" >
+                                        <tr v-for="data in dataList" :key="data.lec_id" :data="data">
                                             <td>{{ data.lec_id }}</td>
                                             <td>{{ data.lec_name }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <div v-else>데이터가 없습니다.</div>
 
-                            <PaginationComponent :current-page="currentPage" :total-items="totalItems" @page-changed="searchLecture" />
+                            <Pagination :current-page="currentPage" :total-items="total" @page-changed="searchLecture" />
 
                             <!-- 학생 목록 -->
                             <p class="conTitle mt50">
@@ -96,7 +94,7 @@
                             </span>
                             
                             <!-- 학생 리스트 -->
-                            <div class="div_list_student" id="div_list_student">
+                            <div class="div_list_student" id="div_list_student" v-if="studentList.length">
                                 <table class="col">
                                     <caption>caption</caption>
                                     <colgroup>
@@ -129,8 +127,9 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div v-else>데이터가 없습니다.</div>
 
-                            <PaginationComponent :current-page="currentPage" :total-items="totalItems" @page-changed="searchStudent" />
+                            <Pagination :current-page="currentPage" :total-items="total" @page-changed="searchStudent" />
                         </div>
 
                         <FooterComponent />
@@ -207,13 +206,18 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="slec_list">
+                                    <tbody id="slec_list" v-if="studentCourses.length">
                                         <tr v-for="course in studentCourses" :key="course.id">
                                             <td>{{ course.id }}</td>
                                             <td>{{ course.name }}</td>
                                             <td>{{ course.period }}</td>
                                             <td>{{ course.status }}</td>
                                             <td></td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="5">데이터가 없습니다.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -269,37 +273,27 @@
 </template>
 
 <script setup>
-
 import { onMounted, ref } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import { SamplePage7 } from '@/api/api';
-import {axiosAction} from '.';
-import CardStu from './CardStu.vue';
+import { axiosAction } from '.';
 
 const dataList = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
 
-const searchLecture = async (currentPage) => {
-    currentPage = currentPage || 1;
+const searchLecture = async (page = 1) => {
     let param = new URLSearchParams();
-    param.append('currentPage', currentPage);
+    param.append('currentPage', page);
     param.append('pageSize', 6);
-
-    // axios.post('/adm/lectureRoomListjson.do', param).then((res) => {
-    //     dataList.value = res.data.listdata;
-    //     total.value = res.data.listcnt;
-    //     currentPage.value = cpage;
-    // });
 
     const stuList = await axiosAction(SamplePage7.std_list, param);
 
-    if(stuList) {
-        dataList.value =stuList.listdata;
-        total.value =   stuList.listcnt;
-        currentPage.value = currentPage;
+    if (stuList) {
+        dataList.value = stuList.listdata;
+        total.value = stuList.listcnt;
+        currentPage.value = page;
     }
-
 };
 
 onMounted(() => {

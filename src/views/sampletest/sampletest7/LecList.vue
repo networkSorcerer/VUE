@@ -17,9 +17,9 @@
             <b> 총 원 : {{ total }} 현재 페이지 번호 : {{ currentPage }} </b>
         </div>
         <div class="row">
-            <CardStu v-for="data in dataList" :key="data.lec_id" :data="data" />
+            <CardLec v-for="data in dataList" :key="data.lec_id" :data="data" />
         </div>
-        <Pagination v-bind="{currentPage, totalItems : total, itemsPerPage : 6}" @search="searchLecture($event)" v-if="dataList.length > 0"/>
+        <Pagination v-bind="{currentPage, totalItems : total, itemsPerPage : 6}" @search="searchLecture($event)" />
         <StuList/>
      </div>
 </template>
@@ -30,7 +30,7 @@ import { onMounted, ref } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import { SamplePage7 } from '@/api/api';
 import {axiosAction} from '.';
-import CardStu from './CardStu.vue';
+import CardLec from './CardLec.vue';
 import StuList from './StuList.vue';
 
 
@@ -41,10 +41,10 @@ const currentPage = ref(1);
 const searchLecture = async (cpage) => {
     cpage = cpage || 1;
     let param = new URLSearchParams();
-    param.append('cpage', cpage);
-    param.append('pagesize', 6);
+    param.append('currentPage', cpage);
+    param.append('pageSize', 6);
 
-
+``
     // axios.post('/adm/lectureRoomListjson.do', param).then((res) => {
     //     dataList.value = res.data.listdata;
     //     total.value = res.data.listcnt;
@@ -54,9 +54,13 @@ const searchLecture = async (cpage) => {
     const lecList = await axiosAction(SamplePage7.lec_list, param);
 
     if(lecList) {
-        dataList.value =lecList.listdata;
-        total.value =   lecList.listcnt;
+        dataList.value = lecList.list_lec;
+        total.value =   lecList.totalCnt_lec;
         currentPage.value = cpage;
+
+        console.log("리스트 데이터:", lecList.list_lec);
+        console.log("총 개수:", lecList.totalCnt_lec);
+        console.log("현재 페이지:", cpage);
     }
 
 };

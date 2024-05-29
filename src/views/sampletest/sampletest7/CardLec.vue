@@ -1,10 +1,10 @@
 <template>
-    <div class="col-sm-4"> 왜 안나와
+    <div class="col-sm-4">
         <div class="card" style="min-height: 150px">
             <div class="card-body">
-                <h5 class="card-title" style="text-align: center">{{ data.lec_id }}</h5>
-                <p class="card-text" style="min-height: 40px">{{ data.lec_name }}</p>
-                <a class="btn btn-info btn-sm" @click="$router.push(`detail/${data.lec_id}`)">상세보기</a>
+                <p class="card-title" style="text-align: center"> {{ data.lec_id }}</p>
+                <h5 class="card-text" style="min-height: 40px"> {{ data.lec_name }}</h5>
+                <a class="btn btn-info btn-sm" @click="$router.push(`detail/${data.lec_id}`)">학생정보</a>
             </div>
         </div>
     </div>
