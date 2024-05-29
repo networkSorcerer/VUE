@@ -42,27 +42,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-info"
-            
-                                >
-                                    등록
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-info"
-                                   
-                                >
-                                    수정
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-info"
-                                    
-                                >
-                                    삭제
-                                </button>
                                 <button type="button" class="btn btn-light" @click="$emit('closeModal', false)">
                                     닫기
                                 </button>
@@ -75,11 +54,34 @@
     </div>
 </template>
   
-  <script>
-  export default {
-  
-  }
-  </script>
+<script>
+import axios from 'axios';
+
+export default {
+    props: ['detailProps', 'functionPros', 'emitProps'],
+    data() {
+        return {
+            noticeDetail: {},
+        };
+    },
+    computed: {
+        userInfo() {
+            return this.$store.getters.getLoginInfo;
+        },
+    },
+    methods: {
+        getTutorDetail() {
+            let param = new URLSearchParams();
+            param.append('loginID', this.detailProps);
+
+            axios.post('/adm/list_tut_json.do', param).then((res) => {
+                this.tutorDetail = res.data.selinfo;
+            });
+        },
+
+    }
+}
+</script>
   
   <style>
   .backdrop {
