@@ -1,9 +1,9 @@
 <template>
-    <TuList></TuList>
+    <NList></NList>
 </template>
 
 <script setup>
-import TuList from './sampletest8/TuList';
+import NList from './sampletest2/NList';
 </script>
 
 <style></style>

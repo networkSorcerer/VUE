@@ -2,12 +2,17 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Notice from '../views/system/Notice';
-import SamplePage5 from '@/views/sampletest/SamplePage5.vue';
 import LectureHandle from '@/views/sampletest/sampletest5/LectureHandle.vue';
+import SamplePage1 from '@/views/sampletest/SamplePage1.vue';
+import SamplePage2 from '@/views/sampletest/SamplePage2.vue';
+import SamplePage3 from '@/views/sampletest/SamplePage3.vue';
+import SamplePage4 from '@/views/sampletest/SamplePage4.vue';
+import SamplePage5 from '@/views/sampletest/SamplePage5.vue';
+import SamplePage6 from '@/views/sampletest/SamplePage6.vue';
 import SamplePage7 from '@/views/sampletest/SamplePage7.vue';
-import StuHandle from '@/views/sampletest/sampletest7/StuHandle.vue';
 import SamplePage8 from '@/views/sampletest/SamplePage8.vue';
-import TuHandle from '@/views/sampletest/sampletest8/TuHandle.vue';
+import SamplePage9 from '@/views/sampletest/SamplePage9.vue';
+import SamplePage10 from '@/views/sampletest/SamplePage10.vue';
 
 
 
@@ -51,48 +56,16 @@ const routes = [
                         component: <SamplePage1 />,
                     },
                     {
-                        path: 'detail/:id',
-                        component: <LectureHandle/>,
-                    },
-                    {
-                        path: 'write',
-                        component:<LectureHandle/>,
-                    },
-                    {
                         path: 'samplepage2',
                         component: <SamplePage2 />,
-                    },
-                    {
-                        path: 'detail/:id',
-                        component: <LectureHandle/>,
-                    },
-                    {
-                        path: 'write',
-                        component:<LectureHandle/>,
                     },
                     {
                         path: 'samplepage3',
                         component: <SamplePage3 />,
                     },
                     {
-                        path: 'detail/:id',
-                        component: <LectureHandle/>,
-                    },
-                    {
-                        path: 'write',
-                        component:<LectureHandle/>,
-                    },
-                    {
                         path: 'samplepage4',
                         component: <SamplePage4 />,
-                    },
-                    {
-                        path: 'detail/:id',
-                        component: <LectureHandle/>,
-                    },
-                    {
-                        path: 'write',
-                        component:<LectureHandle/>,
                     },
                     {
                         path: 'samplepage5',
@@ -107,33 +80,26 @@ const routes = [
                         component:<LectureHandle/>,
                     },
                     {
+                        path: 'samplepage6',
+                        component: <SamplePage6 />,
+                    },             
+                    {
                         path: 'samplepage7',
                         component: <SamplePage7 />,
-                    },
-                    {
-                        path:'detail/:id',
-                        component: <StuHandle/>,
-                    },
-                    {
-                        path: 'write',
-                        component:<StuHandle/>,
                     },
                     {
                         path: 'samplepage8',
                         component: <SamplePage8 />,
                     },
                     {
-                        path:'detail/:id',
-                        component: <TuHandle/>,
-                    },
+                        path: 'samplepage9',
+                        component: <SamplePage9 />,
+                    },             
                     {
-                        path: 'write',
-                        component:<TuHandle/>,
-                    },
-                    {
-                        path: 'samplepage6',
-                        component: <SamplePage6 />,
-                    },               
+                        path: 'samplepage10',
+                        component: <SamplePage10 />,
+                    },             
+                    
                 ],
             },
         ],

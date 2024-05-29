@@ -1,9 +1,9 @@
 <template>
-    <CList></CList>
+    <NList></NList>
 </template>
 
 <script setup>
-import CList from './sampletest1/CList';
+import NList from './sampletest1/NList';
 </script>
 
 <style></style>
