@@ -11,3 +11,7 @@ export const SamplePage8 = {
     tut_list : '/adm/list_tut_json.do',
 };
 
+export const SamplePage3 = {
+    tut_list : '/p/tutor_list.do',
+}
+

@@ -1,5 +1,5 @@
 <template>
-  합체도 하고 ..... 
+  합체도 하고
 </template>
 
 <script>

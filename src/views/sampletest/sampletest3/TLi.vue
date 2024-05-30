@@ -10,28 +10,57 @@
                 <span>강사 명</span>
                 <input type="text" class="lecure-name" />
                 <button class="btn btn-light btn-sm" @click="$router.push('write')">강사 신규등록</button>
-                <button class="btn btn-secondary btn-sm" >검색</button>
+                <button class="btn btn-secondary btn-sm"  @click="searchTutor">검색</button>
             </span>
         </p>
         <div>
             <b> 총 원 : {{ total }} 현재 페이지 번호 : {{ currentPage }} </b>
         </div>
         <div class="row">
-         <CT  />
+          <CT />
         </div>
-        <!-- <Pagination v-bind="{currentPage, totalItems : total, itemsPerPage : 6}" @search="searchLecture($event)" v-if="dataList.length > 0"/> -->
-
-     </div>
+        <Pagination/>
+   </div>
 </template>
-<script>
-import CT from '../sampletest3/CT.vue'
+<script setup>
+import CT from './CT.vue';
+import { onMounted, ref } from 'vue';
+import Pagination from '@/components/common/PaginationComponent.vue';
+import { SamplePage3 } from '@/api/api';
+import {axiosAction} from '.';
 
+const dataList = ref([]);
+const total = ref(0);
+const currentPage = ref(0);
 
-export default {
+const searchTutor = async (cpage) => {
+    cpage = cpage || 1;
+    let param = new URLSearchParams();
+    param.append('currentPage', cpage);
+    param.append('pageSize', 6);
 
-}
+    const tutorList = await axiosAction(SamplePage3.tut_list, param);
+
+    if(tutorList) {
+        dataList.value = tutorList.list_tut;
+        total.value = tutorList.totalCnt;
+        currentPage.value = cpage;
+    }
+};
+
+onMounted(() => {
+    searchTutor();
+})
+
 </script>
 
 <style>
+.lecure-name {
+    height: 30px;
+    border-radius: 5px;
+}
 
+.btn-sm {
+    margin-left: 10px;
+}
 </style>
