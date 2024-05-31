@@ -29,7 +29,7 @@
         v-model="paramObj.to_date"
       />
      <span class="fr">
-        <a class="btn btn-light" @click="getTutorList()">
+        <a class="btn btn-light" @click="searchData('')">
             <span>검 색</span>
         </a>
       </span>
@@ -118,10 +118,12 @@ export default {
       modalState: false,
       modalProps: {},
       loginID:'',
-
     };
   },
   components: { Pagination, NModal},
+  mounted(){
+    this.getTutorList();
+  },
   methods: {
     getTutorList(cpage) {
       if(this.paramObj.from_date > this.paramObj.to_date) {
@@ -201,10 +203,23 @@ export default {
         this.currentPage = 1;
       });
     },
-   
-  mounted(){
-    this.getTutorList();
-  }
+    searchData(data) {
+      let param = new URLSearchParams(this.paramObj);
+      param.append('currentPage', 1);
+      param.append('pageSize', 10);
+      param.append('searchKey', data);
+      param.append('searchWord', data);
+      param.append('loginID', data);
+      param.append('name', data);
+      param.append('tel', data);
+
+      axios.post('/adm/list_tut_json.do', param).then((res) => {
+        this.TutorList = res.data.list_tut;
+        this.totCnt = res.data.totalCnt;
+        this.currentPage = 1;
+      });
+
+    },
 }
 }
 </script>
