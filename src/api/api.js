@@ -12,6 +12,6 @@ export const SamplePage8 = {
 };
 
 export const SamplePage3 = {
-    tut_list : '/p/tutor_list.do',
+    t_list : '/adm/tutor_list1.do',
 }
 

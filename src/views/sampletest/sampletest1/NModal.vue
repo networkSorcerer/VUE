@@ -56,9 +56,6 @@
                                     <td>기간</td>
                                     <td>상태</td>
                                 </tr>
-                                <tr  v-show="detailProps">
-                                    <td><input type="text" v-model="lectureDetail.user_type" disabled></td>
-                                </tr>
                                 <tr v-for="(lecture, i) in lectureDetail" :key="i">
                                     <td>{{ lecture.lec_id }}</td>
                                     <td>{{ lecture.lec_name }}</td>
@@ -78,8 +75,9 @@
 <script>
 import axios from 'axios';
 
+
 export default {
-    props: ['detailProps', 'functionPros', 'emitProps'],
+    props: ['detailProps',  'emitProps'],
     data() {
         return {
             tutorDetail: {},
@@ -94,7 +92,7 @@ export default {
     methods: {
         getTutorDetail() {
         let param = new URLSearchParams();
-        param.append('loginID', this.detailProps);
+        param.append('loginID', this.detailProps.loginID);
 
         axios.post('/adm/tutorView.do', param).then((res) => {
         this.tutorDetail = res.data.selinfo;
@@ -103,26 +101,25 @@ export default {
         },
         getLectureDetail() {
         let param = new URLSearchParams();
-        param.append('loginID', this.detailProps);
+        param.append('loginID',  this.detailProps.loginID);
+        param.append('user_type', this.detailProps.user_type);
 
         axios.post('/adm/slist_lec_json.do', param).then((res) => {
-            this.lectureDetail = res.data.list_tut;
-         }).catch((error) => {
-      console.error('강의 정보 가져오기 오류:', error);
-      // 여기에서 오류를 처리하세요. 예: 사용자에게 오류 메시지를 표시합니다.
-    });
-        },
+            this.lectureDetail = res.data.tlist_lec;
+         });
     },
-
+    },
     mounted() {
+        console.log(this.userInfo.userType)
     if (this.detailProps) {
       this.getTutorDetail();
       this.getLectureDetail(); // 강의 정보도 가져오기
     }
-  },
-   
-   
+  }
 }
+   
+   
+
 </script>
   
   <style>

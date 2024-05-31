@@ -22,6 +22,7 @@
         <Pagination v-bind="{currentPage, totalItems : total, itemsPerPage : 6}" @search="searchLecture($event)" v-if="dataList.length > 0"/>
 
      </div>
+  
 </template>
 
 <script setup>

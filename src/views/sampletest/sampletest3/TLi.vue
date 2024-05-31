@@ -17,9 +17,9 @@
             <b> 총 원 : {{ total }} 현재 페이지 번호 : {{ currentPage }} </b>
         </div>
         <div class="row">
-          <CT />
+          <CT v-for="data in dataList" :key="data.loginID" :data="data"/>
         </div>
-        <Pagination/>
+        <Pagination v-bind="{currentPage, totalItems : total, itemsPerPage : 6}" @search="searchTu($event)"/>
    </div>
 </template>
 <script setup>
@@ -31,7 +31,7 @@ import {axiosAction} from '.';
 
 const dataList = ref([]);
 const total = ref(0);
-const currentPage = ref(0);
+const currentPage = ref(1);
 
 const searchTutor = async (cpage) => {
     cpage = cpage || 1;
@@ -39,7 +39,7 @@ const searchTutor = async (cpage) => {
     param.append('currentPage', cpage);
     param.append('pageSize', 6);
 
-    const tutorList = await axiosAction(SamplePage3.tut_list, param);
+    const tutorList = await axiosAction(SamplePage3.t_list, param);
 
     if(tutorList) {
         dataList.value = tutorList.list_tut;
