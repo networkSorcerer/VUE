@@ -41,10 +41,8 @@
         <b> 총 원 : {{totCnt }}현재 페이지 번호 : {{ currentPage }}</b>
       </div>
       <div class="user-type-buttons">
-        <button type="button"  class="btn btn-light" @click="changeUserType('B')">승인</button>
-        <button type="button"  class="btn btn-light" @click="changeUserType('E')">
-            미승인
-        </button>
+        <button type="button"  class="btn btn-light" @click="changeUserType('B')">승인 강사</button>
+        <button type="button"  class="btn btn-light" @click="changeUserType('E')">미승인 강사</button>
       </div> 
       <table class="col">
           <caption></caption>
@@ -77,7 +75,10 @@
                 <td>{{ tutor.join_date }}</td>
                 <td v-if="tutor.user_type === 'B'">승인</td>
                 <td v-else>승인 거부</td>
-                <td><button @click="getDapv(tutor)" v-show="getTutorList" class="btn btn-light">탈퇴</button></td>
+                <td>
+                  <button @click="getApv(tutor)" v-show="getTutorList" class="btn btn-light">승인</button>
+                  <button @click="getDapv(tutor)" v-show="getTutorList" class="btn btn-light">탈퇴</button>
+                </td>
               </tr>
               </template>
 
@@ -111,12 +112,11 @@ export default {
   data() {
     return {
       TutorList : [],
-      paramObj: { searchWord: '', from_date: '', to_date: ''},
+      paramObj: { searchKey: '',  searchWord: '', from_date: '', to_date: ''},
       totCnt: 0,
       currentPage: 0,
       modalState: false,
       modalProps: {},
-      user_type: 'B',
       loginID:'',
 
     };
@@ -161,14 +161,51 @@ export default {
         }
       });
   },
+
+  getApv(tutor) {
+      // 필요한 데이터를 객체로 만듭니다.
+      let params = {
+        loginID: tutor.loginID,
+        user_type: 'E'
+      };
+
+      // URLSearchParams 객체로 변환합니다.
+      let param = new URLSearchParams(params);
+
+      axios.post('/adm/apv_tut.do', param).then((res) => {
+        if (res.data.result === 'success') {
+          alert(res.data.msg || '승인이 취소되었습니다.');
+          // 리스트를 다시 불러와서 업데이트합니다.
+          this.getTutorList(this.currentPage);
+        } else {
+          alert(res.data.msg || '작업에 실패했습니다.');
+        }
+      });
+  },
     modalHandler(data) {
       this.modalState = true;
       this.modalProps = data;
     },
-  },
+
+    changeUserType(data) {
+      let param = new URLSearchParams(this.paramObj);
+      param.append('currentPage', 1);
+      param.append('pageSize', 10);
+      param.append('searchKey', '');
+      param.append('searchWord', '');
+      param.append('user_type',data);
+
+      axios.post('/adm/list_tut_json.do', param).then((res) => {
+        this.TutorList = res.data.list_tut;
+        this.totCnt = res.data.totalCnt;
+        this.currentPage = 1;
+      });
+    },
+   
   mounted(){
     this.getTutorList();
   }
+}
 }
 </script>
 
