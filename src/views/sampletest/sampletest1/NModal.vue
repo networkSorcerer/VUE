@@ -43,6 +43,11 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td>유저 타입</td>
+                                    <td><input v-model="tutorDetail.user_type" disabled ></td>
+                                    <td></td>
+                                </tr>
                             </table>
                             <div  class="modal-header"> 
                                 <p class="conTitle">
@@ -77,7 +82,7 @@ import axios from 'axios';
 
 
 export default {
-    props: ['detailProps',  'emitProps'],
+    props: ['detailProps', 'functionProps', 'emitProps'],
     data() {
         return {
             tutorDetail: {},
@@ -102,8 +107,8 @@ export default {
         getLectureDetail() {
         let param = new URLSearchParams();
         param.append('loginID',  this.detailProps.loginID);
-        param.append('user_type', this.detailProps.user_type);
-
+        param.append('user_type', this.detailProps.user_type.toLowerCase());
+    
         axios.post('/adm/slist_lec_json.do', param).then((res) => {
             this.lectureDetail = res.data.tlist_lec;
          });

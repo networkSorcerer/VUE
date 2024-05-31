@@ -1,30 +1,51 @@
 <template>
   <h2>강사 관리</h2>
     <div class="search-bar">
-      <select v-model="searchKey" id="searchKey" name="searchKey">
+      <select v-model="searchWord" id="searchWord" name="searchKey">
         <option value="all">전체</option>
         <option value="name">강사명</option>
         <option value="id">ID</option>
         <option value="tel">전화번호</option>
       </select> 
-      <input type="text" id="searchWord" v-model="searchWord" @input="formatPhoneNumber">
-      <button @click="searchTutors">검색</button>
-    </div>
-    <div class="user-type-buttons">
-      <button @click="filterTutors('B')">승인 강사</button>
-      <button @click="filterTutors('E')">미승인 강사</button>
-    </div>
+      <input
+        type="text"
+        style="width: 200px"
+        class="form-control"
+        v-model="paramObj.searchWord"
+      />
     <div class="date-picker">
       <label for="from_date">가입일 조회</label>
-        <input type="date" id="from_date" v-model="fromDate">
-      ~
-      <input type="date" id="to_date" v-model="toDate"> 
-      <button @click="searchTutors">조회</button>
+      <input
+        type="date"
+        style="width: 15%"
+        class="form-control"
+        v-model="paramObj.from_date"
+      />
+     ~
+      <input
+        type="date"
+        style="width: 15%"
+        class="form-control"
+        v-model="paramObj.to_date"
+      />
+     <span class="fr">
+        <a class="btn btn-light" @click="getTutorList()">
+            <span>검 색</span>
+        </a>
+      </span>
+      </div>
     </div>
     <div class="divComGrpCodList">
+      
       <div style="float: left">
         <b> 총 원 : {{totCnt }}현재 페이지 번호 : {{ currentPage }}</b>
       </div>
+      <div class="user-type-buttons">
+        <button type="button"  class="btn btn-light" @click="changeUserType('B')">승인</button>
+        <button type="button"  class="btn btn-light" @click="changeUserType('E')">
+            미승인
+        </button>
+      </div> 
       <table class="col">
           <caption></caption>
           <colgroup>
@@ -33,7 +54,7 @@
               <col width="20%" />
               <col width="20%" />
           </colgroup>
-
+         
           <thead>
               <tr>
                   <th scope="col">강사명(ID)</th>
@@ -44,19 +65,19 @@
               </tr>
           </thead>
           <tbody>
-            <template v-if="TutorList.length <= 0">
+            <template v-if="TutorList.length < 0">
               <tr>
                 <td colspan="7">일치하는 검색 결과가 없습니다</td>
               </tr>
               </template>
               <template v-else>
-              <tr v-for="(tutor, i) in TutorList" :key="i">
+              <tr v-for="(tutor, i) in TutorList" :key="i">  
                 <td @click="modalHandler(tutor)">{{ tutor.name }} ({{ tutor.loginID }})</td>
                 <td>{{ tutor.tel }}</td>
                 <td>{{ tutor.join_date }}</td>
-                <td v-if="tutor.use_yn === 'y'">승인</td>
+                <td v-if="tutor.user_type === 'B'">승인</td>
                 <td v-else>승인 거부</td>
-                <td><button @click="removeTutor(tutor.loginID)">탈퇴</button></td>
+                <td><button @click="getDapv(tutor)" v-show="getTutorList" class="btn btn-light">탈퇴</button></td>
               </tr>
               </template>
 
@@ -95,6 +116,9 @@ export default {
       currentPage: 0,
       modalState: false,
       modalProps: {},
+      user_type: 'B',
+      loginID:'',
+
     };
   },
   components: { Pagination, NModal},
@@ -117,7 +141,26 @@ export default {
         this.currentPage = cpage;
       });
     },
+    getDapv(tutor) {
+      // 필요한 데이터를 객체로 만듭니다.
+      let params = {
+        loginID: tutor.loginID,
+        user_type: 'E'
+      };
 
+      // URLSearchParams 객체로 변환합니다.
+      let param = new URLSearchParams(params);
+
+      axios.post('/adm/apv_tut1.do', param).then((res) => {
+        if (res.data.result === 'success') {
+          alert(res.data.msg || '승인이 취소되었습니다.');
+          // 리스트를 다시 불러와서 업데이트합니다.
+          this.getTutorList(this.currentPage);
+        } else {
+          alert(res.data.msg || '작업에 실패했습니다.');
+        }
+      });
+  },
     modalHandler(data) {
       this.modalState = true;
       this.modalProps = data;
