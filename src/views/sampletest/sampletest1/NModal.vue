@@ -98,10 +98,9 @@ export default {
         getTutorDetail() {
         let param = new URLSearchParams();
         param.append('loginID', this.detailProps.loginID);
-
+        
         axios.post('/adm/tutorView.do', param).then((res) => {
-        this.tutorDetail = res.data.selinfo;
-       
+        this.tutorDetail = res.data.selinfo;      
             });
         },
         getLectureDetail() {

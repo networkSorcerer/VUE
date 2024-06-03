@@ -2,20 +2,28 @@
     <div class="col-sm-4">
         <div class="card" style="min-height: 150px">
             <div class="card-body">
-                <p class="card-title" style="text-align: center"> {{ data.lec_id }}</p>
-                <h5 class="card-text" style="min-height: 40px"> {{ data.lec_name }}</h5>
-                <a class="btn btn-info btn-sm" @click="$router.push(`detail/${data.lec_id}`)">학생정보</a>
+                <p class="card-title" style="text-align: center">{{ data.lec_id }}</p>
+                <h5 class="card-text" style="min-height: 40px">{{ data.lec_name }}</h5>
+                <button @click="handleSearchStu" class="btn btn-light">학생정보</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    defineProps({
-        data: Object,
-    });
+import { defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+    data: Object,
+});
+
+const emits = defineEmits(['searchStu']);
+
+const handleSearchStu = () => {
+    emits('searchStu', props.data.lec_id);
+};
 </script>
-s
+
 <style>
 .col-sm-4 {
     margin-bottom: 10px;
