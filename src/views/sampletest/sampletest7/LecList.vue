@@ -123,8 +123,8 @@
     param.append('searchKey_std', searchKeyStd.value);
     param.append('searchWord_std', searchWordStd.value);
     param.append('totalCnt_std','');
-    param.append('from_data', paramObj);
-    param.append('to_date', paramObj);
+    param.append('from_data', paramObj.value);
+    param.append('to_date', paramObj.value);
     const stulist = await axiosAction(SamplePage7.std_list, param);
   
     if (stulist) {
@@ -148,8 +148,8 @@
 const searchStudent = () => {
   searchStu(1);
 }
-const searchStudentDate = () => {
-  searchStu.value;
+const searchStudentDate = (data) => {
+  searchStu(data);
 }
   onMounted(() => {
     searchLecture();
