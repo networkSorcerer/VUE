@@ -51,7 +51,7 @@
         ~
         <input type="date" style="width: 15%" class="form-control" v-model="paramObj.to_date" />
         <span class="fr">
-          <a class="btn btn-light" @click="searchStudentDate()">
+          <a class="btn btn-light" @click="searchStudentDate(paramObj)">
             <span>검색</span>
           </a>
         </span>
@@ -123,8 +123,8 @@
     param.append('searchKey_std', searchKeyStd.value);
     param.append('searchWord_std', searchWordStd.value);
     param.append('totalCnt_std','');
-    param.append('from_data', paramObj.value);
-    param.append('to_date', paramObj.value);
+    param.append('from_data', paramObj.value.from_date);
+    param.append('to_date', paramObj.value.to_date);
     const stulist = await axiosAction(SamplePage7.std_list, param);
   
     if (stulist) {
@@ -147,11 +147,11 @@
 };
 const searchStudent = () => {
   searchStu(1);
-}
-const searchStudentDate = (data) => {
-  searchStu(data);
-}
-  onMounted(() => {
+};
+const searchStudentDate = () => {
+  searchStu(paramObj.value);
+};
+onMounted(() => {
     searchLecture();
     searchStu();
     allLecture();
