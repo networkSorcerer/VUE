@@ -68,13 +68,20 @@
         <tr v-for="(stu, i) in studata" :key="i">
           <td>{{ stu.std_num }}</td>
           <td>{{ stu.lec_name }}</td>
-          <td  @click="modalHandler()">{{ stu.name }}({{ stu.loginID }})</td>
+          <td  @click="modalHandler(stu.std_num)">
+          {{ stu.name }}({{ stu.loginID }})
+          </td>
           <td>{{ stu.tel }}</td>
           <td>{{ stu.join_date }}</td>
           <td></td>
         </tr>
       </table>
-      <DetailStudentVue></DetailStudentVue>
+      <DetailStudent 
+      v-if="modalBoolean" @closeModal="modalBoolean= $event" 
+        :std_num="std_num"
+        :loginID="loginID"
+        @closeAndSearch="modalClose"
+      />  
     </div>
     <!-- <Pagination v-bind="{ currentPage_std, totalCnt_std: stutotal, itemsPerPage: 5 }" @search="searchLecture($event)" /> -->
   </template>
@@ -83,20 +90,29 @@
   import { ref, onMounted } from 'vue';
   import Pagination from '@/components/common/PaginationComponent.vue';
   import { SamplePage7 } from '@/api/api';
-  import { axiosAction } from '.'; // 경로를 적절히 수정해야 할 수 있습니다.
-  import DetailStudentVue from './DetailStudent.vue';
+  import { axiosAction } from '.'; 
+  import DetailStudent from './DetailStudent.vue';
+
+//강의를 출력하기 위한 변수
   const dataList = ref([]);
   const total = ref(0);
   const currentPage = ref(1);
   const searchWord_lec =ref([]);
 
+//학생 정보를 출력하기 위한 변수
   const studata = ref([]);
   const stutotal = ref(0);
   const searchKeyStd = ref('');
   const searchWordStd = ref('');
   const paramObj = ref({ from_date: '', to_date: '' });
- 
 
+//팝업 창을 만들기 위한 변수
+  const modalBoolean = ref(false);
+  const  std_num = ref(0);
+  const loginID =ref(0);
+
+
+//강의 리스트 출력을 위한 메소드 
   const searchLecture = async (cpage = 1) => {
     let param = new URLSearchParams();
     param.append('searchWord_lec',searchWord_lec.value);
@@ -116,6 +132,8 @@
     }
   };
   
+
+//학생 리스트 출력을 위한 메소드  
   const searchStu = async (lec_id, cpage = 1) => {
     let param = new URLSearchParams();
     param.append('lec_id', lec_id);
@@ -135,43 +153,58 @@
       stutotal.value = stulist.totalCnt_std;
     }
   };
-
-  const detailStudent = () => {
-
-  }
+//전체 강의 출력  
   const allLecture = () => {
   searchWord_lec.value = '';
   searchLecture(1);
 };
+
+//강의리스트 검색 기능 
   const searchData = () => {
     searchLecture(1);
   };
-  
+
+//학생 리스트 전체 조회
   const allStu = async () => {
   searchStu('', 1);
 };
+
+//학생 리스트 검색 기능 
 const searchStudent = () => {
   searchStu(1);
 };
+
+//학생 리스트 날짜 검색 기능 
 const searchStudentDate = () => {
   searchStu(paramObj.value);
 };
-const modalHandler = () => {
-  console.log('학생 상세 정보 ');
-  detailStudent(1);
-}
 
+//팝업창 제어 기능 
+const modalHandler = (param) => {
+  console.log('열려라 참깨~~~~~~!!!!!!!');
+  modalBoolean.value = true;
+  std_num.value = param;
+};
+
+//팝업창 닫기
+const modalClose = (param) => {
+    modalBoolean.value = param;
+    searchStu();
+  };
+
+//훅
 onMounted(() => {
     searchLecture();
     searchStu();
     allLecture();
     allStu();
     searchData();
-    modalHandler();
+    
   });
 
+
   </script>
-  
+
   <style>
 
 .lecure-name {
@@ -182,6 +215,7 @@ onMounted(() => {
 .btn-sm {
   margin-left: 10px;
 }
+
 
 </style>
   

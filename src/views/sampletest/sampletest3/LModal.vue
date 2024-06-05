@@ -48,16 +48,23 @@
 import axios from 'axios';
 
 export default {
-  props: ['detailProps', 'functionProps', 'emitProps'],
+  props: [ 'functionProps', 'emitProps'],
   data() {
     return {
       
     }
   },
   methods: {
-    joinMemer() {
+    joinMember() {
       let param = new URLSearchParams();
+      axios.post('/', param).then((res) => {
+        this.join = res.data;
+      })
+
     }
+  },
+  mounted() {
+    this.joinMember();
   }
 }
 </script>
