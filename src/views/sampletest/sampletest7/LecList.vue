@@ -68,12 +68,13 @@
         <tr v-for="(stu, i) in studata" :key="i">
           <td>{{ stu.std_num }}</td>
           <td>{{ stu.lec_name }}</td>
-          <td>{{ stu.name }}({{ stu.loginID }})</td>
+          <td  @click="modalHandler()">{{ stu.name }}({{ stu.loginID }})</td>
           <td>{{ stu.tel }}</td>
           <td>{{ stu.join_date }}</td>
           <td></td>
         </tr>
       </table>
+      <DetailStudentVue></DetailStudentVue>
     </div>
     <!-- <Pagination v-bind="{ currentPage_std, totalCnt_std: stutotal, itemsPerPage: 5 }" @search="searchLecture($event)" /> -->
   </template>
@@ -83,7 +84,7 @@
   import Pagination from '@/components/common/PaginationComponent.vue';
   import { SamplePage7 } from '@/api/api';
   import { axiosAction } from '.'; // 경로를 적절히 수정해야 할 수 있습니다.
-  
+  import DetailStudentVue from './DetailStudent.vue';
   const dataList = ref([]);
   const total = ref(0);
   const currentPage = ref(1);
@@ -134,6 +135,10 @@
       stutotal.value = stulist.totalCnt_std;
     }
   };
+
+  const detailStudent = () => {
+
+  }
   const allLecture = () => {
   searchWord_lec.value = '';
   searchLecture(1);
@@ -151,13 +156,20 @@ const searchStudent = () => {
 const searchStudentDate = () => {
   searchStu(paramObj.value);
 };
+const modalHandler = () => {
+  console.log('학생 상세 정보 ');
+  detailStudent(1);
+}
+
 onMounted(() => {
     searchLecture();
     searchStu();
     allLecture();
     allStu();
     searchData();
+    modalHandler();
   });
+
   </script>
   
   <style>
