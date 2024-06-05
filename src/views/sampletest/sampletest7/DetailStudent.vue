@@ -9,7 +9,7 @@
                 <table>
                   <tr>
                     <td>ID</td>
-                    <td>{{ data.loginID }}</td>
+                    <td>{{ }}</td>
                     <td>학번</td>
                     <td>{{  }}</td>
                   </tr>
@@ -69,15 +69,18 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
-  const emit = defineEmits(['closeAndSearch']);
+//상위 객체에서 가져온 메소드를 실행하기 위함 
+const emit = defineEmits(['closeAndSearch']);
 
   const props = defineProps({
     std_num: Number,
     loginID: Number    
   });
+  
+//학생 상세 정보를 출력하기 위한 변수
+const student = ref(new Object());
 
-  const student = ref(new Object());
-
+//학생의 상세 정보를 출력
   const getStudent = () => {
     let param = new URLSearchParams();
     param.append('std_num', props.std_num);
@@ -86,6 +89,7 @@ import { onMounted, ref } from 'vue';
     });
   }
 
+//훅을 걸어서 메소드 작동
   onMounted(() => {
     props.std_num ? getStudent() : null; 
   })
