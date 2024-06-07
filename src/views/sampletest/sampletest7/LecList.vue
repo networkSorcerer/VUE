@@ -68,7 +68,7 @@
         <tr v-for="(stu, i) in studata" :key="i">
           <td>{{ stu.std_num }}</td>
           <td>{{ stu.lec_name }}</td>
-          <td  @click="modalHandler(stu.std_num)">
+          <td  @click="modalHandler(stu.std_num, stu.loginID)">
           {{ stu.name }}({{ stu.loginID }})
           </td>
           <td>{{ stu.tel }}</td>
@@ -81,13 +81,14 @@
         :std_num="std_num"
         :loginID="loginID"
         @closeAndSearch="modalClose"
+        :data="dataList"
       />  
     </div>
     <!-- <Pagination v-bind="{ currentPage_std, totalCnt_std: stutotal, itemsPerPage: 5 }" @search="searchLecture($event)" /> -->
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, provide } from 'vue';
   import Pagination from '@/components/common/PaginationComponent.vue';
   import { SamplePage7 } from '@/api/api';
   import { axiosAction } from '.'; 
@@ -99,6 +100,9 @@
   const currentPage = ref(1);
   const searchWord_lec =ref([]);
 
+//데이터를 deepchild까지 전달하기 위함
+provide ('dataList', dataList);
+
 //학생 정보를 출력하기 위한 변수
   const studata = ref([]);
   const stutotal = ref(0);
@@ -108,9 +112,9 @@
 
 //팝업 창을 만들기 위한 변수
   const modalBoolean = ref(false);
-  const  std_num = ref(0);
+  const std_num =ref(0);
   const loginID =ref(0);
-
+  
 
 //강의 리스트 출력을 위한 메소드 
   const searchLecture = async (cpage = 1) => {
@@ -131,6 +135,7 @@
       console.log('현재 페이지:', cpage);
     }
   };
+  
   
 
 //학생 리스트 출력을 위한 메소드  
@@ -180,10 +185,13 @@ const searchStudentDate = () => {
 };
 
 //팝업창 제어 기능 
-const modalHandler = (param) => {
+const modalHandler = (paramNum, paramId) => {
   console.log('열려라 참깨~~~~~~!!!!!!!');
   modalBoolean.value = true;
-  std_num.value = param;
+  std_num.value = paramNum;
+  loginID.value = paramId;
+  
+  console.log('std_num:', paramNum, 'loginID:', loginID.value);
 };
 
 //팝업창 닫기
@@ -199,11 +207,8 @@ onMounted(() => {
     allLecture();
     allStu();
     searchData();
-    
-  });
-
-
-  </script>
+});
+</script>
 
   <style>
 

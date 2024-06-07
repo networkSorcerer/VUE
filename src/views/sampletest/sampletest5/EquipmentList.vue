@@ -56,11 +56,22 @@ const modalBoolean = ref(false);
 const  equipId = ref(0);
 const total = ref(0);
 const currentPage = ref(0);
+
+// 모달 팝업창 클로즈
 const modalClose = (param) => {
     modalBoolean.value = param;
     getEquipmentList();
 }
 
+//팝업 창 
+const modalHandler = (param) => {
+    modalBoolean.value = true;
+    equipId.value = param;
+}
+
+
+
+//장비 목록 출력
 const getEquipmentList = (cpage) => {
     cpage = cpage || 1;
     let param = new URLSearchParams();
@@ -75,10 +86,6 @@ const getEquipmentList = (cpage) => {
     });
 };
 
-const modalHandler = (param) => {
-    modalBoolean.value = true;
-    equipId.value = param;
-}
 
 onMounted(() => {
     getEquipmentList();
