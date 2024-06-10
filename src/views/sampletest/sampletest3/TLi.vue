@@ -49,8 +49,12 @@
           </fieldset>
         </div>
       </div>
-      <!-- <LModal v-if="join" @closeModal="join = false" />
-      <FModal v-if="find" @closeModal="find = false" /> -->
+      <LModal v-if="join" @closeModal="join = $event" 
+      @closeAndSearch="modalClose"
+      />
+      <FModal v-if="find" @closeModal="find = false" 
+      @closeAndSearch="modalClose"
+      />
     </div>
   </template>
   
@@ -63,8 +67,8 @@
   const loginId = ref('');
   const pwd = ref('');
   const saveId = ref(false);
-  const joinM = ref(false);
-  const findM = ref(false);
+  const join = ref(false);
+  const find = ref(false);
   
   const getCookie = (name) => {
     let cookie = document.cookie + ';';
@@ -117,11 +121,11 @@
     saveId.value = id !== '';
   });
   
-  const join = () => {
+  const joinM = () => {
     join.value = true;
   };
   
-  const find = () => {
+  const findM = () => {
     find.value = true;
   };
   </script>
