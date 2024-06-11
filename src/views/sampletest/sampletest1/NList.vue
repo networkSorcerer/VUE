@@ -1,100 +1,88 @@
 <template>
-  <h2>강사 관리</h2>
-  <div class="search-bar">
-    <select v-model="paramObj.searchKey" id="searchKey" name="searchKey">
-      <option value="all">전체</option>
-      <option value="name">강사명</option>
-      <option value="id">ID</option>
-      <option value="tel">전화번호</option>
-    </select>
-    <input
-      type="text"
-      style="width: 200px"
-      class="form-control"
-      v-model="paramObj.searchWord"
-    />
-    <div class="date-picker">
-      <label for="from_date">가입일 조회</label>
+  <div class="container mt-5">
+    <h2>강사 관리</h2>
+    <div class="search-bar d-flex mb-3">
+      <select v-model="paramObj.searchKey" id="searchKey" name="searchKey" class="form-select me-2">
+        <option value="all">전체</option>
+        <option value="name">강사명</option>
+        <option value="id">ID</option>
+        <option value="tel">전화번호</option>
+      </select>
       <input
-        type="date"
-        style="width: 15%"
-        class="form-control"
-        v-model="paramObj.from_date"
+        type="text"
+        class="form-control d-inline-block w-auto ml-2"
+        v-model="paramObj.searchWord"
+        placeholder="검색어를 입력하세요"
       />
-      ~
-      <input
-        type="date"
-        style="width: 15%"
-        class="form-control"
-        v-model="paramObj.to_date"
-      />
-      <span class="fr">
-        <a class="btn btn-light" @click="searchData">
-          <span>검 색</span>
-        </a>
-      </span>
+      <div class="date-picker d-flex align-items-center me-2">
+        <label for="from_date" class="me-2">가입일 조회</label>
+        <input type="date" class="form-control me-2" v-model="paramObj.from_date" />
+        <span>~</span>
+        <input type="date" class="form-control ms-2" v-model="paramObj.to_date" />
+      </div>
+      <button class="btn btn-primary" @click="searchData">검색</button>
     </div>
-  </div>
-  <div class="divComGrpCodList">
-    <div style="float: left">
-      <b> 총 원 : {{ totCnt }} 현재 페이지 번호 : {{ currentPage }}</b>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <b> 총 원 : {{ totCnt }} 현재 페이지 번호 : {{ currentPage }}</b>
+      </div>
+      <div class="user-type-buttons btn-group">
+        <button type="button" class="btn btn-outline-primary" @click="changeUserType('B')">승인 강사</button>
+        <button type="button" class="btn btn-outline-secondary" @click="changeUserType('E')">미승인 강사</button>
+      </div>
     </div>
-    <div class="user-type-buttons">
-      <button type="button" class="btn btn-light" @click="changeUserType('B')">승인 강사</button>
-      <button type="button" class="btn btn-light" @click="changeUserType('E')">미승인 강사</button>
-    </div>
-    <table class="col">
-      <caption></caption>
-      <colgroup>
-        <col width="20%" />
-        <col width="20%" />
-        <col width="20%" />
-        <col width="20%" />
-      </colgroup>
+
+    <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">강사명(ID)</th>
           <th scope="col">휴대전화</th>
           <th scope="col">가입일자</th>
           <th scope="col">승인여부</th>
-          <th scope="col"></th>
+          <th scope="col">작업</th>
         </tr>
       </thead>
       <tbody>
         <template v-if="TutorList.length === 0">
           <tr>
-            <td colspan="5">일치하는 검색 결과가 없습니다</td>
+            <td colspan="5" class="text-center">일치하는 검색 결과가 없습니다</td>
           </tr>
         </template>
         <template v-else>
           <tr v-for="(tutor, i) in TutorList" :key="i">
-            <td @click="modalHandler(tutor)">{{ tutor.name }} ({{ tutor.loginID }})</td>
+            <td @click="modalHandler(tutor)" class="cursor-pointer">{{ tutor.name }} ({{ tutor.loginID }})</td>
             <td>{{ tutor.tel }}</td>
             <td>{{ tutor.join_date }}</td>
-            <td v-if="tutor.user_type === 'B'">승인</td>
-            <td v-else>승인 거부</td>
             <td>
-              <button @click="getApv(tutor)" class="btn btn-light">승인</button>
-              <button @click="getDapv(tutor)" class="btn btn-light">탈퇴</button>
+              <span class="badge" :class="{'bg-success': tutor.user_type === 'B', 'bg-danger': tutor.user_type !== 'B'}">
+                {{ tutor.user_type === 'B' ? '승인' : '승인 거부' }}
+              </span>
+            </td>
+            <td>
+              <button @click="getApv(tutor)" class="btn btn-success btn-sm">승인</button>
+              <button @click="getDapv(tutor)" class="btn btn-danger btn-sm">탈퇴</button>
             </td>
           </tr>
         </template>
       </tbody>
     </table>
+
     <Pagination
       v-if="totCnt > 0"
       :currentPage="currentPage"
       :totalItems="totCnt"
       @search="getTutorList"
     />
+
+    <NModal
+      v-if="modalState"
+      @closeModal="modalState = $event"
+      :detailProps="modalProps"
+      :functionProps="getTutorList"
+      :emitProps="currentPage"
+    />
   </div>
-  <NModal
-    v-if="modalState"
-    @closeModal="modalState = $event"
-    :detailProps="modalProps"
-    :functionProps="getTutorList"
-    :emitProps="currentPage"
-  />
 </template>
 
 <script>

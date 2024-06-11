@@ -13,7 +13,7 @@
                             <button type="button" class="btn btn-light" @click="$emit('closeModal', false)">
                                     닫기
                             </button>
-                            <table class="tutor">
+                            <table class="table table-striped">
                                 <tr  v-show="detailProps">
                                     <td>ID</td>
                                     <td>
@@ -54,7 +54,7 @@
                                     <span>강의 정보</span>
                                 </p>
                             </div>
-                            <table class="lecture">
+                            <table class="table table-striped">
                                 <tr>
                                     <td>강의ID</td>
                                     <td>강의명</td>
