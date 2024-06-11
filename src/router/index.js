@@ -13,7 +13,7 @@ import SamplePage7 from '@/views/sampletest/SamplePage7.vue';
 import SamplePage8 from '@/views/sampletest/SamplePage8.vue';
 import SamplePage9 from '@/views/sampletest/SamplePage9.vue';
 import SamplePage10 from '@/views/sampletest/SamplePage10.vue';
-
+import LecList from '@/views/std/LecList.vue';
 
 
 const routes = [
@@ -47,6 +47,15 @@ const routes = [
                         component: <Notice />,
                     },
                 ],
+            },
+            {
+                path: 'std',
+                children: [
+                    {
+                        path: 'lectureList',
+                        component: <LecList/>,
+                    }
+                ]
             },
             {
                 path: 'sampletest',

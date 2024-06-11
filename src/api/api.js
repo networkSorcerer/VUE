@@ -15,3 +15,11 @@ export const SamplePage3 = {
     t_list : '/adm/tutor_list1.do',
 }
 
+
+export const MyPage = {
+    Get: '/personal/personalInfojson.do',
+    CheckPassword: '/personal/checkPwd.do',
+    UpdatePassword: '/personal/personalPwdChange.do',
+    Quit: '/personal/personalQuit.do',
+    Update: '/personal/personalBasicSave.do',
+};

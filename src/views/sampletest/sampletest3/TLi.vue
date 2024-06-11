@@ -64,6 +64,7 @@
   import LModal from './LModal.vue';
   import FModal from './FModal.vue';
   
+
   const loginId = ref('');
   const pwd = ref('');
   const saveId = ref(false);
@@ -115,6 +116,8 @@
     });
   };
   
+ 
+
   onMounted(() => {
     let id = getCookie('LOGIN_ID');
     loginId.value = id;
