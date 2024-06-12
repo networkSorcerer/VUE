@@ -32,7 +32,7 @@
               <tbody>
                 <tr v-for="data in dataList" :key="data.lec_id">
                   <td>{{ data.lec_id }}</td>
-                  <td>{{ data.lec_name }}</td>
+                  <td @click="modalHandler()">{{ data.lec_name }}</td>
                   <td>{{ data.tut_name }}</td>
                   <td>{{ data.lecrm_name }}</td>
                   <td>{{ data.start_date }} ~ {{ data.end_date }}</td>
@@ -46,6 +46,12 @@
       </div>
     </div>
   </div>
+  <MyLecDetail
+  v-if="modalBoolean" 
+  @closeModal="modalBoolean= $event" 
+  :lec_id="lec_id"
+   @closeAndSearch="modalClose"
+  />
   <Pagination
     v-if="totalItems > 0"
     :currentPage="currentPage"
@@ -59,11 +65,14 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
+import MyLecDetail from './MyLecDetail.vue';
 
 const currentPage = ref(1); // Default to page 1
 const dataList = ref([]);
 const searchKey = ref('all');
 const totalItems = ref(0); // To track the total number of items
+const modalBoolean = ref(false);
+const lec_id = ref(0);
 
 const myLecList = (cpage) => {
   cpage = cpage || 1;
@@ -79,6 +88,18 @@ const myLecList = (cpage) => {
   }).catch((error) => {
     console.error('Error fetching lecture list:', error);
   });
+};
+
+
+
+// 모달 팝업창 클로즈
+const modalClose = (param) => {
+    modalBoolean.value = param;
+}
+
+const modalHandler = (param) => {
+    modalBoolean.value = true;
+    lec_id.value = param;
 }
 
 onMounted(() => {
