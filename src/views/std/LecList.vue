@@ -60,7 +60,7 @@
 import RegiLec from './RegiLec.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
+const Total = ref();
 const dataList = ref([]);
 const currentPage = ref(0);
 const loginID = ref(0);

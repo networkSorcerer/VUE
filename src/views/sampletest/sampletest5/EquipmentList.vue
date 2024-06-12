@@ -69,8 +69,6 @@ const modalHandler = (param) => {
     equipId.value = param;
 }
 
-
-
 //장비 목록 출력
 const getEquipmentList = (cpage) => {
     cpage = cpage || 1;

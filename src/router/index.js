@@ -14,8 +14,10 @@ import SamplePage8 from '@/views/sampletest/SamplePage8.vue';
 import SamplePage9 from '@/views/sampletest/SamplePage9.vue';
 import SamplePage10 from '@/views/sampletest/SamplePage10.vue';
 import LecList from '@/views/std/LecList.vue';
-
-
+import MyLec from '@/views/std/MyLec.vue';
+import Learning from '@/views/std/Learning.vue';
+import HomeWork from '@/views/std/HomeWork.vue';
+import Test from '@/views/std/Test.vue';
 const routes = [
     {
         path: '/',
@@ -54,9 +56,26 @@ const routes = [
                     {
                         path: 'lectureList',
                         component: <LecList/>,
+                    },
+                    {
+                        path: 'myLecInfo',
+                        component: <MyLec/>,
+                    },
+                    {
+                        path: 's_learningMaterials',
+                        component: <Learning/>,
+                    },
+                    {
+                        path: 'submittedWork',
+                        component: <HomeWork/>
+                    },
+                    {
+                        path: 'myTestInfo',
+                        component: <Test/>
                     }
                 ]
             },
+        
             {
                 path: 'sampletest',
                 children: [
