@@ -28,13 +28,13 @@
                                 <td>결과</td>
                                 <td>시험응시</td>
                             </tr>
-                            <tr>
-                                <td>과정명</td>
-                                <td>과정명</td>
-                                <td>과정명</td>
-                                <td>과정명</td>
-                                <td>과정명</td>
-                                <td>과정명</td>
+                            <tr v-for="data in dataList" :key="data.loginID">
+                                <td>{{ data.lec_name }}</td>
+                                <td>{{ data.test_name }}</td>
+                                <td>{{ data.tut_name }}</td>
+                                <td>{{ data.test_start }} ~ {{ data.test_end }}</td>
+                                <td>{{  data.test_yn }}</td>
+                                <td>시험응시</td>
                             </tr>
                         </table>
                     </div>
@@ -45,10 +45,30 @@
 </div>
 </template>
 
-<script>
-export default {
+<script setup>
+import axios from 'axios';
+import {ref, onMounted} from 'vue';
 
-}
+
+const dataList = ref([]);
+
+
+const TestList =(cpage) => {
+    cpage = cpage || 1;
+    let param = new URLSearchParams();
+    param.append('currentPage',cpage);
+    param.append('pageSize', 10);
+    param.append('searchKey','');
+    axios.post('/std/myTestListJson.do', param).then((res)=> {
+        dataList.value = res.data.listData;
+    });
+};
+
+
+
+onMounted(() => {
+    TestList();
+})
 </script>
 
 <style>
