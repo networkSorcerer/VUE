@@ -61,6 +61,7 @@ const TestList =(cpage) => {
     param.append('searchKey','');
     axios.post('/std/myTestListJson.do', param).then((res)=> {
         dataList.value = res.data.listData;
+        console.log(dataList);
     });
 };
 

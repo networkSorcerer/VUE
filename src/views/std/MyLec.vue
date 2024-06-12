@@ -67,7 +67,7 @@
   <Survey
    v-if="modalBoolean1"
     @closeModal="modalBoolean1 = $event"
-    :lec_id="lecId"
+    :lec_id="lec_id"
     :loginID="loginID"
     :tut_name="tut_name"
     :lec_name="lec_name"
@@ -92,10 +92,18 @@ const dataList = ref([]);
 const searchKey = ref('all');
 const totalItems = ref(0); // To track the total number of items
 const modalBoolean = ref(false);
+
 const lec_id = ref(0);
+const loginID = ref(0);
+
+const tut_name = ref('');
+const lec_name = ref('');
+
 const listCount = ref(0);
 const currentTime = ref(new Date());
 const modalBoolean1 = ref(false);
+
+
 const myLecList = (page) => {
   page = page || 1;
   let param = new URLSearchParams();
@@ -122,20 +130,27 @@ const lectureStopGoing = (data) => {
     return currentTime.value <= endDate;
 }
 
-const openSurvey = (lec_id) => {
-    console.log('설문조사 모달 열기:', lec_id);
+const openSurvey = (paramLec, paramID, paramLecName, paramTutName) => {
+    console.log('설문조사 모달 열기:', paramLec); // 콘솔에 매개 변수 출력
     modalBoolean1.value = true;
+    lec_id.value = paramLec;
+    loginID.value = paramID;
+    lec_name.value = paramLecName;
+    tut_name.value = paramTutName;
 }
+
 
 // 모달 팝업창 클로즈
 const modalClose = (param) => {
   modalBoolean.value = param;
   modalBoolean1.value = param;
+  
 };
 
-const modalHandler = (param) => {
+const modalHandler = (param_lec1, param_ID1) => {
   modalBoolean.value = true;
-  lec_id.value = param;
+  lec_id.value = param_lec1;
+  loginID.value = param_ID1;
 };
 
 // Watcher for searchKey changes

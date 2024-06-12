@@ -10,11 +10,11 @@
           <div>
             <div>
               <table>
-                <tr v-if="lecId">
+                <tr v-for="data in dataList" :key="data.key">
                     <td>강의명</td>
-                    <td> <input type="text" v-model="dataList.lec_name"></td>
+                    <td> {{ data.lec_name }}</td>
                     <td>강사명</td>
-                    <td><input type="text" v-model="dataList.tut_name"></td>
+                    <td>{{data.tut_name}}</td>
                 </tr>
                 <tr v-for="q in datalist " :key="q.que_num" >
                   <td>{{ data.que }}</td>
@@ -62,11 +62,12 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 const emit = defineEmits(['closeAndSearch']);
 const props = defineProps({
-    lecId: Number,
-    tut_name: String,
-    lec_name: Object,
+        lec_id: Number,
+        tut_name: String,
+        lec_name: String,
+        loginID: Number,
     });
-console.log(props.lecId);
+console.log(props.lec_id);
 console.log(props.tut_name);
 console.log(props.lec_name);
 
@@ -76,7 +77,7 @@ const responses = ref({});
 
 const SubmitEvent = () => {
   let param = new URLSearchParams();
-  param.append('lec_id', props.lecId);
+  param.append('lec_id', props.lec_id);
   param.append('listCnt','');
   Object.keys(responses.value).forEach(key => {
     param.append(key, responses.value[key]);

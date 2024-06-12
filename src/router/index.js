@@ -18,6 +18,7 @@ import MyLec from '@/views/std/MyLec.vue';
 import Learning from '@/views/std/Learning.vue';
 import HomeWork from '@/views/std/HomeWork.vue';
 import Test from '@/views/std/Test.vue';
+import QnA from '@/views/community/QnA.vue'
 const routes = [
     {
         path: '/',
@@ -49,6 +50,10 @@ const routes = [
                         component: <Notice />,
                     },
                 ],
+            },
+            {
+                path: 'qna',
+                component: <QnA/>
             },
             {
                 path: 'std',
@@ -133,6 +138,7 @@ const routes = [
         ],
         component: Dashboard,
     },
+  
     {
         path: '/about',
         name: 'about',

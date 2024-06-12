@@ -53,11 +53,13 @@
   const detail = ref([]);
   const props = defineProps({
     lec_id: Number,
+    loginID: String,
   });
   
   const LecDetail = () => {
     let param = new URLSearchParams();
     param.append('lec_id', props.lec_id);
+    param.append('loginID', props.loginID);
     axios.post('/std/myLecDetailJson.do', param).then((res) => {
       console.log(res.data);  // API 응답 데이터 콘솔에 출력
       detail.value = res.data.listData;
