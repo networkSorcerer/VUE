@@ -29,7 +29,7 @@
                             </tr>
                             <tr v-for="data in dataList" :key="data.loginID">
                                 <td>{{ data.qna_id }}</td>
-                                <td>{{ data.qna_title }}</td>
+                                <td @click="modalHandler(data.qna_id, data.qna_title, data.qna_con)">{{ data.qna_title }}</td>
                                 <td>{{ data.loginID }}</td>
                                 <td>{{ data.regdate }}</td>
                                 <td>{{  }}</td>
@@ -41,7 +41,13 @@
         </div>
     </div>
     <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 5}" @search="QNA($event)" v-if="dataList.length > 0"/>
-
+     <DQ
+     v-if="modalBoolean" @closeModal="modalBoolean= $event" 
+        :qna_id="qna_id"
+        :qna_title="qna_title"
+        :qna_con="qna_con"
+        @closeAndSearch="modalClose"
+     />
 </div>  
 </template>
 
@@ -49,10 +55,15 @@
 import axios from "axios";
 import {ref, onMounted} from "vue";
 import Pagination from '@/components/common/PaginationComponent.vue';
+import DQ from './DQ.vue';
 
 const dataList = ref([]);
 const currentPage = ref(0);
 const Total = ref(0);
+const modalBoolean = ref(false);
+const qna_id = ref(0);
+const qna_title =ref('');
+const qna_con = ref('');
 
 const QNA = (cpage) => {
     cpage = cpage || 1;
@@ -67,6 +78,19 @@ const QNA = (cpage) => {
     });
 };
 
+// 모달 팝업창 클로즈
+const modalClose = (param) => {
+    modalBoolean.value = param;
+    QNA();
+}
+
+//팝업 창 
+const modalHandler = (paramId, paramTitle, paramCon) => {
+    modalBoolean.value = true;
+    qna_id.value = paramId;
+    qna_title.value = paramTitle;
+    qna_con.value = paramCon;
+}
 onMounted(() => {
     QNA();
 })
