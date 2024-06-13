@@ -7,47 +7,59 @@
           <button type="button" class="btn btn-light" @click="$emit('closeModal', false)">닫기</button>
         </div>
         <div>
-          <div>
-            <div>
-              <table>
-                <tr v-for="data in dataList" :key="data.key">
-                    <td>강의명</td>
-                    <td> {{ data.lec_name }}</td>
-                    <td>강사명</td>
-                    <td>{{data.tut_name}}</td>
-                </tr>
-                <tr v-for="q in datalist " :key="q.que_num" >
-                  <td>{{ data.que }}</td>
-                </tr>
-                <tr v-for="data in dataList" :key="'input-' + data.que_num">
-                  <td>
-                    <div v-if="data.que_num === 11">
-                      <textarea v-model="responses[data.que_num]" placeholder="의견을 입력하세요"></textarea>
-                    </div>
-                    <div v-else>
-                      <label>
-                        <input type="radio" :name="'rating-' + data.que_num" :value="data.que_one" v-model="responses[data.que_num]">
-                        {{ data.que_one }}
-                      </label>
-                      <label>
-                        <input type="radio" :name="'rating-' + data.que_num" :value="data.que_two" v-model="responses[data.que_num]">
-                        {{ data.que_two }}
-                      </label>
-                      <label>
-                        <input type="radio" :name="'rating-' + data.que_num" :value="data.que_three" v-model="responses[data.que_num]">
-                        {{ data.que_three }}
-                      </label>
-                      <label>
-                        <input type="radio" :name="'rating-' + data.que_num" :value="data.que_four" v-model="responses[data.que_num]">
-                        {{ data.que_four }}
-                      </label>
-                      <label>
-                        <input type="radio" :name="'rating-' + data.que_num" :value="data.que_five" v-model="responses[data.que_num]">
-                        {{ data.que_five }}
-                      </label>
-                    </div>
-                  </td>
-                </tr>
+          <div >
+            <table>
+              <tr>
+                <td>강의명</td>
+                <td>{{ lec_name }}</td>
+                <td>강사명</td>
+                <td>{{ tut_name }}</td>
+              </tr>
+            </table>
+            <div >
+              <table v-for="(data, i) in dataList" :key="i">
+                <tbody>
+                  <tr>
+                    <td colspan="5" > {{ data.que }}</td>
+                  </tr>
+                  <tr >
+                    <td v-if="data.que_num === 11" colspan="5">
+                      <textarea v-model="responses['survey_review']" placeholder="의견을 입력하세요"></textarea>
+                    </td>
+                    <template v-else>
+                      <td>
+                        <label>
+                          <input type="radio"  value="1" v-model="responses['survey_answer' + i]">
+                          {{ data.que_one }}
+                        </label>
+                      </td>
+                      <td>
+                        <label>
+                          <input type="radio"  value="2" v-model="responses['survey_answer' + i]">
+                          {{ data.que_two }}
+                        </label>
+                      </td>
+                      <td>
+                        <label>
+                          <input type="radio"  value="3" v-model="responses['survey_answer' + i]">
+                          {{ data.que_three }}
+                        </label>
+                      </td>
+                      <td>
+                        <label>
+                          <input type="radio"   value="4" v-model="responses['survey_answer' +i]">
+                          {{ data.que_four }}
+                        </label>
+                      </td>
+                      <td>
+                        <label>
+                          <input type="radio"   value="5" v-model="responses['survey_answer' + i]">
+                          {{ data.que_five }}
+                        </label>
+                      </td>
+                    </template>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -60,28 +72,34 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+
 const emit = defineEmits(['closeAndSearch']);
 const props = defineProps({
-        lec_id: Number,
-        tut_name: String,
-        lec_name: String,
-        loginID: Number,
-    });
-console.log(props.lec_id);
-console.log(props.tut_name);
-console.log(props.lec_name);
+  lec_id: Number,
+  tut_name: String,
+  lec_name: String,
+});
 
-
+const listCnt = ref(0);
 const dataList = ref([]);
 const responses = ref({});
+const que_num = ref('');
 
 const SubmitEvent = () => {
   let param = new URLSearchParams();
   param.append('lec_id', props.lec_id);
-  param.append('listCnt','');
+  param.append('listCnt', listCnt.value);
+  param.append('lec_name', props.lec_name);
+  param.append('tut_name', props.tut_name);
+  
   Object.keys(responses.value).forEach(key => {
     param.append(key, responses.value[key]);
   });
+  dataList.value.map((a) => {
+    param.append('que_num'+a.que_num, a.que_num);
+  })
+
+  console.log('응답 리스트', responses);
   axios.post('/std/submitSurvey.do', param).then((res) => { // 실제 API 경로에 맞게 수정 필요
     if (res.data.result === 'SUCCESS') {
       alert('제출에 성공했습니다');
@@ -97,11 +115,10 @@ const SubmitEvent = () => {
 
 const Survey = () => {
   let param = new URLSearchParams();
-  param.append('lec_id', props.lec_id);
-  param.append('lec_name', props.lec_name);
-  param.append('tut_name', props.tut_name);
   axios.post('/std/surveyItemListJson.do', param).then((res) => {
     dataList.value = res.data.listData;
+    listCnt.value = res.data.listCnt;
+    que_num.value = res.data.que_num;
   }).catch((error) => {
     console.error('Error fetching survey items:', error);
   });

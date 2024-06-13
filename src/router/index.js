@@ -19,6 +19,15 @@ import Learning from '@/views/std/Learning.vue';
 import HomeWork from '@/views/std/HomeWork.vue';
 import Test from '@/views/std/Test.vue';
 import QnA from '@/views/community/QnA.vue'
+import LecPlan from '@/views/tut/LecPlan.vue';
+import StudentInfo from '@/views/tut/StudentInfo.vue';
+import LearnData from  '@/views/tut/LearnData.vue';
+import Project from '@/views/tut/Project.vue';
+import TestControl from '@/views/tut/TestControl.vue';
+import TestT from '@/views/tut/TestT.vue';
+import Grade from '@/views/tut/Grade.vue';
+import Survey from '@/views/tut/Survey.vue';
+
 const routes = [
     {
         path: '/',
@@ -76,8 +85,45 @@ const routes = [
                     },
                     {
                         path: 'myTestInfo',
-                        component: <Test/>
+                        component: <TestT/>,
                     }
+                ]
+            },
+            {
+                path:  'tut',
+                children: [
+                    {
+                        path: 'lecturePlan',
+                        component: <LecPlan/>,
+                    },
+                    {
+                        path: 'lectureStudentInfo',
+                        component: <StudentInfo/>
+                    },
+                    {
+                        path: 't_learningMaterials',
+                        component: <LearnData/>
+                    },
+                    {
+                        path: 'projectControl',
+                        component: <Project/>
+                    },
+                    {
+                        path: 'testControl',
+                        component: <TestControl/>
+                    },
+                    {
+                        path: 'testGenerate',
+                        component: <Test/>
+                    },
+                    {
+                        path: 'checkGrades',
+                        component: <Grade/>
+                    },
+                    {
+                        path: 't_surveyControl',
+                        component: <Survey/>
+                    },
                 ]
             },
         

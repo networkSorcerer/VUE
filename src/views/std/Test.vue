@@ -42,25 +42,29 @@
             </div>
         </div>
     </div>
+    <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 5}" @search="TestList($event)" v-if="dataList.length > 0"/>
 </div>
 </template>
 
 <script setup>
 import axios from 'axios';
 import {ref, onMounted} from 'vue';
-
+import Pagination from '@/components/common/PaginationComponent.vue';
 
 const dataList = ref([]);
-
+const currentPage = ref(0);
+const Total = ref(0);
 
 const TestList =(cpage) => {
     cpage = cpage || 1;
     let param = new URLSearchParams();
     param.append('currentPage',cpage);
-    param.append('pageSize', 10);
+    param.append('pageSize', 5);
     param.append('searchKey','');
     axios.post('/std/myTestListJson.do', param).then((res)=> {
         dataList.value = res.data.listData;
+        currentPage.value = cpage;
+        Total.value = res.data.listCnt;
         console.log(dataList);
     });
 };

@@ -41,26 +41,31 @@
             </div>
         </div>
     </div>
+    <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 10}" @search="LearnData($event)" v-if="dataList.length > 0"/>
 </div>
-<!-- <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 5}" @search="LearnData($event)" v-if="dataList.length > 0"/> -->
+
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import Pagination from '@/components/common/PaginationComponent.vue';
 
 const dataList = ref([]);
 const currentPage = ref(0);
+const Total = ref(0);
+
 
 const LearnData =(cpage) => {
     cpage = cpage || 1;
    
     let param = new URLSearchParams();
     param.append('currentPage', cpage);
-    param.append('pageSize', 5);
+    param.append('pageSize', 10);
     axios.post('/std/stdLearnMatListJson', param).then((res) => {
         dataList.value = res.data.learningMatList;
-        
+        Total.value =res.data.totalCount;
+        currentPage.value = cpage;
     });
 };
 

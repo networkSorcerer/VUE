@@ -60,7 +60,7 @@
 import RegiLec from './RegiLec.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-const Total = ref();
+
 const dataList = ref([]);
 const currentPage = ref(0);
 const loginID = ref(0);
@@ -68,7 +68,7 @@ const lec_id = ref(0);
 const modalBoolean = ref(false);
 const lecInfo = ref({});
 const weekplan = ref({});
-
+const Total = ref(0);
 const modalClose = (param) => {
   modalBoolean.value = param;
   LecList();
@@ -85,6 +85,7 @@ const modalHandler = (data) => {
   axios.post('/std/lecInfo.do', param).then((res) => {
     lecInfo.value = res.data.lecInfo;
     weekplan.value = res.data.week_plan;
+   
     if (res.data.result === 'SUCCESS') {
       alert(res.data.resultMsg);
     }
@@ -103,6 +104,7 @@ const LecList = (cpage = 1) => {
   axios.post('/std/lecListJson.do', param).then((res) => {
     dataList.value = res.data.lecList;
     currentPage.value = cpage;
+    Total.value = res.data.lecTotal
   }).catch((error) => {
     console.error('Error fetching lecture list:', error);
   });

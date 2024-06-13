@@ -32,7 +32,7 @@
               <tbody>
                 <tr v-for="data in dataList" :key="data.lec_id">
                   <td>{{ data.lec_id }}</td>
-                  <td @click="modalHandler(data.lec_id)">{{ data.lec_name }}</td>
+                  <td @click="modalHandler(data.lec_id, data.loginID)">{{ data.lec_name }}</td>
                   <td>{{ data.tut_name }}</td>
                   <td>{{ data.lecrm_name }}</td>
                   <td>{{ data.start_date }} ~ {{ data.end_date }}
@@ -42,7 +42,7 @@
                   </td>
                   <td>{{ data.apv_yn === 'Y' ? '승인' : '미승인' }}</td>
                   <td>
-                    <span v-if="data.apv_yn === 'Y' && lectureStopGoing(data) === false" @click="openSurvey(data.lec_id)" style="cursor: pointer; color: blue;">
+                    <span v-if="data.apv_yn === 'Y' && lectureStopGoing(data) === false" @click="openSurvey(data.lec_id,  data.lec_name, data.tut_name )" style="cursor: pointer; color: blue;">
                      설문조사
                     </span>
                     <span v-else>
@@ -55,8 +55,22 @@
           </div>
         </div>
       </div>
+      <Pagination 
+      v-bind="{ currentPage, totalItems: listCount, itemsPerPage: 5 }"
+      @search="myLecList($event)"
+      v-if="dataList.length > 0"
+    />
     </div>
-  </div>
+    <Survey
+   v-if="modalBoolean1"
+    @closeModal="modalBoolean1 = $event"
+    :lec_id="lec_id"
+    :tut_name="tut_name"
+    :lec_name="lec_name"
+    @closeAndSearch="modalClose"
+ 
+  
+  />
   <MyLecDetail
     v-if="modalBoolean"
     @closeModal="modalBoolean = $event"
@@ -64,20 +78,8 @@
     :loginID="loginID"
     @closeAndSearch="modalClose"
   />
-  <Survey
-   v-if="modalBoolean1"
-    @closeModal="modalBoolean1 = $event"
-    :lec_id="lec_id"
-    :loginID="loginID"
-    :tut_name="tut_name"
-    :lec_name="lec_name"
-    @closeAndSearch="modalClose"
-  />
-  <Pagination 
-      v-bind="{ currentPage, totalItems: listCount, itemsPerPage: 100 }"
-      @search="myLecList($event)"
-      v-if="dataList.length > 0"
-    />
+    </div>
+
 </template>
 
 <script setup>
@@ -86,11 +88,17 @@ import { onMounted, ref, watch } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import MyLecDetail from './MyLecDetail.vue';
 import Survey from './Survey.vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const userInfo = computed(() => store.getters.getLoginInfo);
+
 
 const currentPage = ref(1); // Default to page 1
 const dataList = ref([]);
 const searchKey = ref('all');
-const totalItems = ref(0); // To track the total number of items
 const modalBoolean = ref(false);
 
 const lec_id = ref(0);
@@ -103,22 +111,25 @@ const listCount = ref(0);
 const currentTime = ref(new Date());
 const modalBoolean1 = ref(false);
 
+const listCnt = ref(0);
 
 const myLecList = (page) => {
   page = page || 1;
   let param = new URLSearchParams();
   param.append('currentPage', page);
-  param.append('pageSize', 100);
+  param.append('pageSize', 5);
   param.append('searchKey', searchKey.value); // searchKey의 값을 파라미터로 추가
-  
+  // listCount.value로 수정
+  param.append('','');
   axios.post('/std/myLecListJson.do', param).then((res) => {
     dataList.value = res.data.listData;
-    totalItems.value = res.data.totalCount; // Assuming the response has totalCount
     currentPage.value = page;
+    listCount.value = res.data.listCnt; // 서버 응답의 listCnt를 listCount로 저장
   }).catch((error) => {
     console.error('Error fetching lecture list:', error);
   });
 };
+
 
 const lectureOnGoing = (data) => {
     const startDate = new Date(data.start_date);
@@ -130,11 +141,10 @@ const lectureStopGoing = (data) => {
     return currentTime.value <= endDate;
 }
 
-const openSurvey = (paramLec, paramID, paramLecName, paramTutName) => {
+const openSurvey = (paramLec,  paramLecName, paramTutName) => {
     console.log('설문조사 모달 열기:', paramLec); // 콘솔에 매개 변수 출력
     modalBoolean1.value = true;
     lec_id.value = paramLec;
-    loginID.value = paramID;
     lec_name.value = paramLecName;
     tut_name.value = paramTutName;
 }

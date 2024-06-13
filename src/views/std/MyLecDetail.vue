@@ -7,32 +7,38 @@
               <div>
                 <p>수강목록 상세보기</p>
               </div>
-              <div v-for="data in detail" :key="data.loginID" >
+              <div v-if="detail.length >0 ">
                 <table>
                   <tr>
                     <td>강의명</td>
-                    <td>{{ data.lec_name }}</td>
+                    <td>{{ detail[0].lec_name }}</td>
                     <td>강의분류</td>
-                    <td>{{ data.lec_type_id }}</td>
+                    <td>{{ detail[0].lec_type_id }}</td>
                   </tr>
                   <tr>
                     <td>강사명</td>
-                    <td>{{ data.tut_name }}</td>
+                    <td>{{ detail[0].tut_name }}</td>
                     <td>강의실</td>
-                    <td>{{ data.lecrm_name }}</td>
+                    <td>{{ detail[0].lecrm_name }}</td>
                   </tr>
                   <tr>
                     <td>강의기간</td>
-                    <td>{{ data.start_date }} ~ {{ data.end_date }}</td>
+                    <td>{{ detail[0].start_date }} ~ {{ detail[0].end_date }}</td>
                     <td></td>
                     <td></td>
                   </tr>
                   <tr>
                     <td>수업목표</td>
-                    <td>{{ data.lec_goal }}</td>
+                    <td>{{ detail[0].lec_goal }}</td>
                     <td></td>
                     <td></td>
                   </tr>
+                </table>
+              </div>
+              
+              <div> 
+                <table>
+                  
                 </table>
               </div>
               <div>

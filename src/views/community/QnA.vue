@@ -40,13 +40,19 @@
             </div>
         </div>
     </div>
+    <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 5}" @search="QNA($event)" v-if="dataList.length > 0"/>
+
 </div>  
 </template>
 
 <script setup>
 import axios from "axios";
 import {ref, onMounted} from "vue";
+import Pagination from '@/components/common/PaginationComponent.vue';
+
 const dataList = ref([]);
+const currentPage = ref(0);
+const Total = ref(0);
 
 const QNA = (cpage) => {
     cpage = cpage || 1;
@@ -56,6 +62,8 @@ const QNA = (cpage) => {
     param.append('searchtitle','');
     axios.post('/qnaListJson.do',param).then((res) => {
         dataList.value = res.data.listData;
+        currentPage.value = cpage;
+        Total.value = res.data.listcnt;
     });
 };
 
