@@ -36,9 +36,18 @@
                 </table>
               </div>
               
-              <div> 
+              <div v-for="(week, i) in detail" :key="i"> 
                 <table>
-                  
+                  <tr v-if="week.week != null">
+                    <td rowspan="2">{{ week.week }}</td>
+                    <td>학습목표</td>
+                    <td>{{ week.learn_goal }}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>학습내용</td>
+                    <td>{{ week.learn_con }}</td>
+                  </tr>
                 </table>
               </div>
               <div>

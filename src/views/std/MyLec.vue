@@ -42,11 +42,14 @@
                   </td>
                   <td>{{ data.apv_yn === 'Y' ? '승인' : '미승인' }}</td>
                   <td>
-                    <span v-if="data.apv_yn === 'Y' && lectureStopGoing(data) === false" @click="openSurvey(data.lec_id,  data.lec_name, data.tut_name )" style="cursor: pointer; color: blue;">
+                    <span v-if="SurveyYN(data) === false && lectureStopGoing(data) === false" @click="openSurvey(data.lec_id,  data.lec_name, data.tut_name )" style="cursor: pointer; color: blue;">
                      설문조사
                     </span>
+                    <span v-if="SurveyYN(data) === true && lectureStopGoing(data) === false">
+                     설문조사 완료
+                    </span>
                     <span v-else>
-                      {{ lectureStopGoing(data) ? '응시기간 아님' : '설문조사예정' }}
+                      예정일 아님 
                     </span>
                   </td>
                 </tr>
@@ -88,12 +91,6 @@ import { onMounted, ref, watch } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import MyLecDetail from './MyLecDetail.vue';
 import Survey from './Survey.vue';
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-
-const store = useStore();
-
-const userInfo = computed(() => store.getters.getLoginInfo);
 
 
 const currentPage = ref(1); // Default to page 1
@@ -111,7 +108,7 @@ const listCount = ref(0);
 const currentTime = ref(new Date());
 const modalBoolean1 = ref(false);
 
-const listCnt = ref(0);
+
 
 const myLecList = (page) => {
   page = page || 1;
@@ -162,6 +159,11 @@ const modalHandler = (param_lec1, param_ID1) => {
   lec_id.value = param_lec1;
   loginID.value = param_ID1;
 };
+
+const SurveyYN = (data) => {
+  return data.srvy_yn === 'Y';
+}
+
 
 // Watcher for searchKey changes
 watch(searchKey, () => {

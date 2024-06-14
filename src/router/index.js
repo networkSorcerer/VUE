@@ -85,7 +85,7 @@ const routes = [
                     },
                     {
                         path: 'myTestInfo',
-                        component: <TestT/>,
+                        component: <Test/>,
                     }
                 ]
             },
@@ -114,7 +114,7 @@ const routes = [
                     },
                     {
                         path: 'testGenerate',
-                        component: <Test/>
+                        component: <TestT/>
                     },
                     {
                         path: 'checkGrades',
