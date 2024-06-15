@@ -18,7 +18,7 @@ import MyLec from '@/views/std/MyLec.vue';
 import Learning from '@/views/std/Learning.vue';
 import HomeWork from '@/views/std/HomeWork.vue';
 import Test from '@/views/std/Test.vue';
-import QnA from '@/views/community/QnA.vue'
+import QnA from '@/views/community/QnA1.vue'
 import LecPlan from '@/views/tut/LecPlan.vue';
 import StudentInfo from '@/views/tut/StudentInfo.vue';
 import LearnData from  '@/views/tut/LearnData.vue';

@@ -1,99 +1,127 @@
 <template>
-<div> 
-    <div> 
-        <div> 
-            <div> 
-                <div> 
-                    <div> 
-                        <p>/ 커뮤니티 / Q&A </p>      
-                    </div>
-                    <div> 
-                        <h3>Q&A게시판</h3>
-                    </div>
-                    <div><p>제목</p></div>
-                    <div> 
-                        <input type="text">
-                    </div>
-                    <div> 
-                        <button>검색</button>
-                        <button>글쓰기</button>
-                    </div>
-                    <div> 
-                        <table>
-                            <tr >
-                                <td>번호</td>
-                                <td>제목</td>
-                                <td>작성자</td>
-                                <td>등록일</td>
-                                <td>조회수</td>
-                            </tr>
-                            <tr v-for="data in dataList" :key="data.loginID">
-                                <td>{{ data.qna_id }}</td>
-                                <td @click="modalHandler(data.qna_id, data.qna_title, data.qna_con)">{{ data.qna_title }}</td>
-                                <td>{{ data.loginID }}</td>
-                                <td>{{ data.regdate }}</td>
-                                <td>{{  }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div id="notice">
+        <p class="Location">
+            <a href="/dashboard/home" class="btn_set home"></a>
+            <span class="btn_nav bold">커뮤니티</span>
+            <span class="btn_nav bold">Q&A</span>
+        </p>
+        <p class="conTitle">
+            <span>Q&A 게시판</span>
+        </p>
+        <div id="searchArea" style="display: flex; justify-content: space-around;">
+            <table style="border: 1px #50bcdf;" width="100%" cellpadding="5" cellspacing="0" border="1" align="left" >
+                <tr style="border: 0px; border-color: blue">
+                    <td width="50" height="25" style="font-size: 100%; text-align: end" >
+                
+                        <span style="font-size: large; margin: 10px;" >제목</span>
+
+                        <input
+                            type="text"
+                            style="width: 200px; height: 40px; border-radius: 0.375rem; margin-right: 10px"
+                            v-model="searchtitle"
+                        />
+                
+                        <span class="fr">
+                            <a class="btn btn-primary mx-2" style="margin-left: 10px;" >
+                                <span @click="getQnAList()">검 색</span>
+                            </a>
+                            <a class="btn btn-primary mx-2">
+                                <span @click="modalHandler()">글쓰기</span>
+                            </a>
+                        </span>
+            
+                    </td>
+                </tr>
+            </table>
         </div>
+
+        <div class="divComGrpCodList">
+            <table class="col">
+                <caption></caption>
+                <colgroup>
+                    <col width="10%" />
+                    <col width="50%" />
+                    <col width="20%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                </colgroup>
+
+                <thead>
+                    <tr>
+                        <th scope="col">번호</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">등록일</th>
+                        <th scope="col">조회수</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="data in dataList" :key="data.qna_id">
+                        <td>{{ data.qna_id }}</td>
+                        <td @click="modalHandler(data.qna_id)">{{ data.qna_title }}</td>
+                        <td>{{ data.loginID }}</td>
+                        <td>{{ data.regdate }}</td>
+                        <td>{{ data.hit }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <Pagination 
+            :currentPage="currentPage"
+            :totalItems="listCount"
+            @search="getQnAList($event)"
+            v-if="dataList.length > 0"
+        />
+        <QnAModal
+            v-if="modalBoolean"
+            :qna_id="qna_id"
+            @closeModal="modalBoolean=$event"
+            @getQnAList="getQnAList"
+        />
     </div>
-    <Pagination v-bind="{currentPage, totalItems : Total, itemsPerPage : 5}" @search="QNA($event)" v-if="dataList.length > 0"/>
-     <DQ
-     v-if="modalBoolean" @closeModal="modalBoolean= $event" 
-        :qna_id="qna_id"
-        :qna_title="qna_title"
-        :qna_con="qna_con"
-        @closeAndSearch="modalClose"
-     />
-</div>  
 </template>
 
 <script setup>
-import axios from "axios";
-import {ref, onMounted} from "vue";
 import Pagination from '@/components/common/PaginationComponent.vue';
-import DQ from './DQ.vue';
+import QnAModal from './QnAModal.vue';
+import axios from 'axios';
+import { onMounted,ref, watch } from 'vue';
 
-const dataList = ref([]);
+const dataList =ref([]);
+const listCount = ref(0);
 const currentPage = ref(0);
-const Total = ref(0);
-const modalBoolean = ref(false);
+const searchtitle = ref('');
+const modalBoolean =ref(false);
 const qna_id = ref(0);
-const qna_title =ref('');
-const qna_con = ref('');
 
-const QNA = (cpage) => {
-    cpage = cpage || 1;
+const getQnAList = (page) => {
+    page = page || 1;
     let param = new URLSearchParams();
-    param.append('cpage',cpage);
-    param.append('pagesize',5);
-    param.append('searchtitle','');
-    axios.post('/qnaListJson.do',param).then((res) => {
+    param.append('cpage', page);
+    param.append('pagesize', 10);
+    param.append('searchtitle', searchtitle.value);
+
+    axios.post('/qnaListJson.do', param).then((res) => {
         dataList.value = res.data.listData;
-        currentPage.value = cpage;
-        Total.value = res.data.listcnt;
+        listCount.value = res.data.listcnt;
+        currentPage.value = page;
     });
 };
 
-// 모달 팝업창 클로즈
-const modalClose = (param) => {
-    modalBoolean.value = param;
-    QNA();
+const modalHandler = (param) => {
+    modalBoolean.value = true;
+    qna_id.value = param;
 }
 
-//팝업 창 
-const modalHandler = (paramId, paramTitle, paramCon) => {
-    modalBoolean.value = true;
-    qna_id.value = paramId;
-    qna_title.value = paramTitle;
-    qna_con.value = paramCon;
-}
-onMounted(() => {
-    QNA();
+onMounted(()=> {
+    getQnAList();
+});
+
+watch(modalBoolean, ()=> {
+    getQnAList();
 })
+
 </script>
 
 <style>

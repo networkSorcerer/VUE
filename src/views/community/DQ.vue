@@ -3,8 +3,8 @@
       <div class="container">
         <div>
           <div>
-            <span @click="ModQ()">수정</span>
-            <span @click="delQ()">삭제</span>
+            <span @click="modalHandler(props.qna_id, props.qna_title, props.qna_con)">수정</span>
+            <span @click="DeleteQNA(props.qna_id)">삭제</span>
           </div>
           <div>
             <table>
@@ -41,26 +41,38 @@
         </table>
         <button type="button" class="btn btn-light" @click="$emit('closeModal', false)">닫기</button>
       </div>
-      
+      <DDQ 
+        v-if="modalBoolean"
+        :qna_id="qna_id"
+        :qna_title="qna_title"
+        :qna_con="qna_con"
+        @closeModal = "modalBoolean=$event"
+        @QNA="QNA"
+      />
     </div>
   </template>
   
   <script setup>
   import axios from 'axios';
   import { ref, onMounted } from 'vue';
-  
+  import DDQ from './DDQ.vue';
   const props = defineProps({
     qna_id: Number,
     qna_title: String,
     qna_con: String,
   });
-  
+  const emit = defineEmits(['closeModal', 'QNA']);
   const qna = ref([]);
   const newComment = ref('');
- 
+  
   const isEditMode = ref(false); // 댓글 수정 모드인지 여부
   const editingCommentId = ref(null); // 수정 중인 댓글의 ID
   
+  const modalBoolean = ref(false);
+  const qna_id = ref(0);
+  const qna_title =ref('');
+  const qna_con = ref('');
+
   const qnaView = () => {
     let param = new URLSearchParams();
     param.append('qna_id', props.qna_id);
@@ -69,6 +81,35 @@
     });
   };
   
+  const DeleteQNA = () => {
+    let param = new URLSearchParams();
+    param.append('qna_id',props.qna_id);
+    axios.post('/qnaDelete.do', param).then((res) => {
+        if(res.data.result === true) {
+            alert(res.data.msg);
+        } else {
+            alert(res.data.msg);
+        }
+        emit('closeModal', false);
+            emit('QNA');
+    });
+};
+
+const WriteQNA = ()=> {
+  let param = new URLSearchParams();
+  param.append('qna_id', props.qna_Id);
+  axios.post('/qnaSave.do', param).then((res) => {
+    if(res.data.result === 'S') {
+            alert(res.data.msg);
+        } else {
+            alert(res.data.msg);
+        }
+        emit('closeModal', false);
+            emit('QNA');
+    });
+  }
+
+
   const NewComment = () => {
     if (!newComment.value.trim()) {
       alert('댓글을 입력하세요.');
@@ -119,13 +160,14 @@
     isEditMode.value = true;
   };
   
-  const ModQ = () => {
-    // 질문 수정 로직
-  };
+  const modalHandler = (paramId, paramTitle, paramCon) => {
+    modalBoolean.value = true;
+    qna_id.value = paramId;
+    qna_title.value = paramTitle;
+    qna_con.value = paramCon;
+}
   
-  const delQ = () => {
-    // 질문 삭제 로직
-  };
+
   
   onMounted(() => {
     qnaView();
