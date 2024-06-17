@@ -6,8 +6,9 @@
           <p class="mb-4"><strong>/ 학습 관리 / 학습 자료</strong></p>
           <h3>학습 자료</h3>
           <div class="mb-3">
-            <select class="form-select">
-              <option>선택</option>
+            <select class="form-select" v-model="selectLecture">
+              <option>강의 선택</option>
+              <option v-for="data in dataList" :key="data.lec_id" :value="data.lec_id">{{ data.lec_name }}</option>
             </select>
           </div>
           <div class="mb-3">
@@ -45,22 +46,35 @@ import { ref, onMounted } from 'vue';
 const dataList = ref([]);
 const totalCount = ref(0);
 
-const LearnData = (cpage) => {
+const dataList1 =ref([]);
+
+const selectLecture = ref(0);
+const rec_id = ref();
+const selectL = () => {
+
+  let param = new URLSearchParams();
+
+  axios.post('/tut/t_learningMaterialsReact', param).then((res) => {
+    dataList.value = res.data.lectureList;
+    
+  });
+};
+
+
+const LecDataList =(cpage) => {
   cpage = cpage || 1;
   let param = new URLSearchParams();
   param.append('currentPage', cpage);
   param.append('pageSize', 5);
-  param.append('lectureValue','' );
+  param.append('lectureValue',dataList.value.lec_id );
   param.append("tutorId",'' );
-
   axios.post('/tut/tutorLearnMatListReact', param).then((res) => {
-    dataList.value = res.data.learningMatList;
-    totalCount.value = res.data.totalCount;
-  });
-};
-
+    dataList1.value = res.data.data;
+  })
+}
 onMounted(() => {
-  LearnData();
+  selectL();
+  LecDataList();
 });
 </script>
 

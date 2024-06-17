@@ -62,7 +62,7 @@ const LearnData =(cpage) => {
     let param = new URLSearchParams();
     param.append('currentPage', cpage);
     param.append('pageSize', 10);
-    axios.post('/std/stdLearnMatListJson', param).then((res) => {
+    axios.post('/std/stdLearnMatListjson', param).then((res) => {
         dataList.value = res.data.learningMatList;
         Total.value =res.data.totalCount;
         currentPage.value = cpage;

@@ -25,7 +25,7 @@ import LearnData from  '@/views/tut/LearnData.vue';
 import Project from '@/views/tut/Project.vue';
 import TestControl from '@/views/tut/TestControl.vue';
 import TestT from '@/views/tut/TestT.vue';
-import Grade from '@/views/tut/Grade.vue';
+
 import Survey from '@/views/tut/Survey.vue';
 
 const routes = [
@@ -118,7 +118,7 @@ const routes = [
                     },
                     {
                         path: 'checkGrades',
-                        component: <Grade/>
+                        component: <TestBank/>
                     },
                     {
                         path: 't_surveyControl',
