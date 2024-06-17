@@ -101,7 +101,7 @@ const LecList = (cpage = 1) => {
   param.append('searchInfo', '');
   param.append('searchKey', '');
 
-  axios.post('/std/lecListJson.do', param).then((res) => {
+  axios.post('/std/lecListjson.do', param).then((res) => {
     dataList.value = res.data.lecList;
     currentPage.value = cpage;
     Total.value = res.data.lecTotal
