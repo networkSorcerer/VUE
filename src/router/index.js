@@ -24,7 +24,7 @@ import StudentInfo from '@/views/tut/StudentInfo.vue';
 import LearnData from  '@/views/tut/LearnData.vue';
 import Project from '@/views/tut/Project.vue';
 import TestControl from '@/views/tut/TestControl.vue';
-import TestT from '@/views/tut/TestT.vue';
+import Counseling from '@/views/tut/Counseling.vue';
 
 import Survey from '@/views/tut/Survey.vue';
 
@@ -112,10 +112,7 @@ const routes = [
                         path: 'testControl',
                         component: <TestControl/>
                     },
-                    {
-                        path: 'testGenerate',
-                        component: <TestT/>
-                    },
+                    
                     {
                         path: 'checkGrades',
                         component: <TestBank/>
@@ -123,6 +120,15 @@ const routes = [
                     {
                         path: 't_surveyControl',
                         component: <Survey/>
+                    },
+                ]
+            },
+            {
+                path: 'adv', 
+                children: [
+                    {
+                        path: 'advice',
+                        component: <Counseling/>
                     },
                 ]
             },
