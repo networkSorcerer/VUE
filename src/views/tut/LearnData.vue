@@ -6,7 +6,7 @@
           <p class="mb-4"><strong>/ 학습 관리 / 학습 자료</strong></p>
           <h3>학습 자료</h3>
           <div class="mb-3">
-            <select class="form-select" v-model="selectLecture">
+            <select class="form-select" v-model="selectLecture" style="width:300px;height:50px;">
                 <option v-for="data in dataList" :key="data.lec_id" :value="data.lec_id">{{ data.lec_name }}</option>
             </select>
           </div>

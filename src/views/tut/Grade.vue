@@ -1,5 +1,5 @@
 <template>
-  성적조회
+  
 </template>
 
 <script>
