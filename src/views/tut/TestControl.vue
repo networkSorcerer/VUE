@@ -33,7 +33,7 @@
 									</colgroup>
               <thead>
                 <tr>
-                  <th>전체 선택<input type="checkbox" @change="selectAll"></th>
+                  <th>전체 선택<input type="checkbox" v-model="selectAll" @change="toggleSelectAll"></th>
                   <th>que_id</th>
                   <th>시험분류</th>
                   <th>문제</th>
@@ -47,7 +47,7 @@
               </thead>
               <tbody>
                 <tr v-for="data in dataList" :key="data.que_id">
-                  <td><input type="checkbox" v-model="Q" :value="data.use_yn"></td>
+                  <td><input type="checkbox" v-model="data.selected" :value="data.use_yn"></td>
                   <td>{{ data.que_id }}</td>
                   <td>{{ data.lec_type_name }}</td>
                   <td>{{ data.test_que }}</td>
@@ -56,13 +56,26 @@
                   <td>{{ data.que_ex2 }}</td>
                   <td>{{ data.que_ex3 }}</td>
                   <td>{{ data.que_ex4 }}</td>
-                  <td><button class="btn btn-secondary btn-sm" @click="editQuestion(data)">수정</button></td>
+                  <td><button class="btn btn-secondary btn-sm" 
+                    @click="editQuestion(
+                      data.que_id,
+                      data.lec_type_name,
+                      data.test_que,
+                      data.que_ans,
+                      data.que_ex1,
+                      data.que_ex2,
+                      data.que_ex3,
+                      data.que_ex4
+                      )">
+                      수정
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <Pagination v-bind="{ currentPage, totalItems: TotalCnt, itemsPerPage: 5 }" @search="TestList($event)"/>
+        <Pagination v-bind="{ currentPage, totalItems: TotalCnt, itemsPerPage: pageSize }" @search="TestList($event)"/>
       </div>
     </div>
   </div>
@@ -70,13 +83,13 @@
   v-if="modalBoolean"
   @closeModal ="modalBoolean=$event"
   @closeAndSearch="modalClose"
-  :type="type"
+  
   />
   <UpdateTest
   v-if="modalBoolean1"
   @closeModal ="modalBoolean1=$evetn"
   @closeAndSearch="modalClose"
-  :type="type"
+   :paramObject="paramObject"
   />
 </template>
 
@@ -86,6 +99,17 @@ import { ref, onMounted, watch } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import NewTest from './NewTest.vue';
 import UpdateTest from './UpdateTest.vue';
+
+const paramObject = ({
+  que_id : 0,
+  lec_type_name: '',
+  test_que: '',
+  que_ans: 0,
+  que_ex1: '',
+  que_ex2: '',
+  que_ex3: '',
+  que_ex4: ''
+})
 
 const dataList = ref([]);
 const TotalCnt = ref(0);
@@ -97,7 +121,7 @@ const ChooseType = ref(0);
 const Q = ref(0);
 
 const que_id= ref(0);
-
+const selectAll = ref(false);
 const modalBoolean = ref(false);
 const modalBoolean1 = ref(false);
 
@@ -126,11 +150,6 @@ const TestList = (cpage) => {
   });
 };
 
-const selectAll = (event) => {
-  dataList.value.forEach(item => {
-    item.use_yn = event.target.checked;
-  });
-};
 
 const UseOrNot = () => {
   console.log('que_id', Q.value);
@@ -152,10 +171,25 @@ const modalHandler = (param1, param2) => {
 };
 
 
-const editQuestion = (param3, param4) => {
+const editQuestion = ( 
+  que_id ,
+  lec_type_name,
+  test_que,
+  que_ans,
+  que_ex1,
+  que_ex2,
+  que_ex3,
+  que_ex4) => {
+
   modalBoolean1.value = true;
-  que_id.value = param3
-  type.value = param2;
+  paramObject.value = ({ que_id ,
+  lec_type_name,
+  test_que,
+  que_ans,
+  que_ex1,
+  que_ex2,
+  que_ex3,
+  que_ex4});
 };
 
 
@@ -165,8 +199,13 @@ const modalClose = (param) => {
 
 }
 
+const toggleSelectAll = () => {
+  dataList.value.forEach(data => data.selected = selectAll.value);
+}
+
 onMounted(() => {
   TypeList();
+  
 });
 </script>
 

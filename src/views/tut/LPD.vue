@@ -145,7 +145,7 @@
   };
   
   const onGoingLecture = () => {
-
+    
   }
 
   const termiantedLecture =()=> {

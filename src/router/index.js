@@ -28,7 +28,7 @@ import Counseling from '@/views/tut/Counseling.vue';
 import Grade from '@/views/tut/Grade.vue';
 import Survey from '@/views/tut/Survey.vue';
 import LectureRoom from '@/views/adm/LectureRoom.vue';
-
+import EQList from '@/views/adm/EQList.vue';
 const routes = [
     {
         path: '/',
@@ -139,7 +139,11 @@ const routes = [
                     {
                         path: 'lectureRoom',
                         component: <LectureRoom/>
-                    }
+                    },
+                    {
+                        path: 'equManagement',
+                        component: <EQList/>
+                    },
                 ]
             },
         

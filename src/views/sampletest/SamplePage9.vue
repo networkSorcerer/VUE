@@ -1,9 +1,9 @@
 <template>
-    <TuList></TuList>
+    <VUE></VUE>
 </template>
 
 <script setup>
-import TuList from './sampletest8/TuList';
+import VUE from './sampletest9/VUE';
 </script>
 
 <style></style>

@@ -13,7 +13,7 @@
                   <label class="col-sm-2 col-form-label">시험분류</label>
                   <div class="col-sm-10">
                     <select class="form-control" v-model="examCategory">
-                        <option>{{  }}</option>
+                        <option v-for="data in type" :key="data.lec_type_id" :value="data.lec_type_id">{{ data.lec_type_name }}</option>
                     </select>
                   </div>
                 </div>
@@ -56,9 +56,9 @@
                 <div class="mb-3 row">
                   <label class="col-sm-2 col-form-label">사용 여부</label>
                   <div class="col-sm-10">
-                    <select class="form-select" v-model="isActive">
-                      <option value="active">활성화</option>
-                      <option value="inactive">비활성화</option>
+                    <select class="form-select" v-model="UseORNot">
+                      <option value="Y">활성화</option>
+                      <option value="N">비활성화</option>
                     </select>
                   </div>
                 </div>
@@ -76,19 +76,55 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
-  const props = defineProps({
-    type: Object
-  })
+  import axios from 'axios';
+  import { onMounted, ref  } from 'vue';
 
+  const type = ref([]);
+  const examCategory = ref(0);
+  const question = ref('');
+  const answer = ref(0);
+  const option1 = ref('');
+  const option2 = ref('');
+  const option3 = ref('');
+  const option4 = ref('');
+  const UseORNot = ref('');
   
+  const TypeList = () => {
+  let param = new URLSearchParams();
+  axios.post('/tut/testControlJson.do', param).then((res)=>{
+    type.value = res.data.lecList;
+    const chtype = dataList.value[0]?.lec_type_id;
+    ChooseType.value = chtype;
+  });
+};
+  console.log('타입이 나오려나', type.value);
+
   const saveQuestion = () => {
-    // 저장 로직
+    let param = new URLSearchParams();
+    param.append('lec_type_id', examCategory.value);
+    param.append('test_que',question.value );
+    param.append('que_ans',answer.value);
+    param.append('que_ex1',option1.value);
+    param.append('que_ex2',option2.value);
+    param.append('que_ex3',option3.value);
+    param.append('que_ex4',option4.value);
+    param.append('use_yn', UseORNot.value);
+    param.append('action', 'I');
+    param.append('que_id','');
+    axios.post('/tut/testSave.do', param).then((res)=>{
+      if(res.data.reuslt < 0) {
+        alert(res.data.resultMsg);
+      } else {
+        alert(res.data.resultMsg);
+      }
+    })
   };
   
-  const cancel = () => {
-    // 취소 로직
-  };
+
+
+  onMounted(()=>{
+    TypeList();
+  })
   </script>
   
   <style>

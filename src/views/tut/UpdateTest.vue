@@ -12,13 +12,15 @@
                 <div class="mb-3 row">
                   <label class="col-sm-2 col-form-label">시험분류</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="examCategory">
+                    <select class="form-control" v-model="examCategory">
+                      <option v-for="data in type" :key="data.lec_type_id" :value="lec_type_id">{{ data.lec_type_name }}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="mb-3 row">
                   <label class="col-sm-2 col-form-label">문제</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control" rows="3" v-model="question"></textarea>
+                    <textarea class="form-control" rows="3" v-model="props.paramObject.value.test_que"></textarea>
                   </div>
                 </div>
                 <div class="mb-3 row">
@@ -74,7 +76,54 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 
+import { onMounted, ref  } from 'vue';
+
+
+const props = defineProps({
+    paramObject: Object
+  });
+
+  
+  const examCategory = ref(0);
+
+  const TypeList = () => {
+  let param = new URLSearchParams();
+  axios.post('/tut/testControlJson.do', param).then((res)=>{
+    type.value = res.data.lecList;
+    const chtype = dataList.value[0]?.lec_type_id;
+    ChooseType.value = chtype;
+  });
+};
+  console.log('타입이 나오려나', type.value);
+
+  const saveQuestion = () => {
+    let param = new URLSearchParams();
+    param.append('lec_type_id', examCategory.value);
+    param.append('test_que',question.value );
+    param.append('que_ans',answer.value);
+    param.append('que_ex1',option1.value);
+    param.append('que_ex2',option2.value);
+    param.append('que_ex3',option3.value);
+    param.append('que_ex4',option4.value);
+    param.append('use_yn', UseORNot.value);
+    param.append('action', 'I');
+    param.append('que_id','');
+    axios.post('/tut/testSave.do', param).then((res)=>{
+      if(res.data.reuslt < 0) {
+        alert(res.data.resultMsg);
+      } else {
+        alert(res.data.resultMsg);
+      }
+    })
+  };
+  
+
+
+  onMounted(()=>{
+    TypeList();
+  })
 </script>
 
 <style>
