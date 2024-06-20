@@ -156,6 +156,7 @@ const currentTest = ref({
 
 
 const listPage = (page = 1) => {
+  let param = new URLSearchParams();
   console.log('use_yn', showInactive.value)
   currentPage.value = page;
   const params = {
@@ -165,7 +166,8 @@ const listPage = (page = 1) => {
     cpage: page,
     pagesize: pageSize.value,
   };
-  axios.post('/tut/testListRtn.do', params).then((response) => {
+  param.append('cpage', page);
+  axios.post('/tut/testListRtn.do', params, param).then((response) => {
     testList.value = response.data.listdata.map(item => ({
       ...item,
       selected: false

@@ -100,7 +100,7 @@
   const lectype = ref([]);
   const lecroom = ref([]);
   
-  console.log(props.propsObject)
+  
   const selectedLecType = ref(props.propsObject.lec_type_id);
   const selectedLecRoom = ref(dataList.lecrm_name);
   const selectLec = ref(props.propsObject.lec_id);
