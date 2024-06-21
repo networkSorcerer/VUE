@@ -85,6 +85,9 @@ const props = defineProps({
   lectureId : Number,
 });
 
+
+console.log('useStore는 뭘까?????',userInfo.value);
+
 const dataList = reactive({ lec_name:'',std_id:'',adv_date:'',adv_place:'',adv_content:'',mod_date:'' , tut_name:'' });
 const dataList1 = ref([]);
 const CHLec = ref(0);
@@ -125,6 +128,7 @@ const updateConsultation = () => {
     .then((res) => {
        if(res.data.result === 'SUCCESS') {
         alert(res.data.resultMsg);
+        emit('closeAndSearch', false);
        }
     })
     .catch((error) => {

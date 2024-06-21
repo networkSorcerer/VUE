@@ -10,7 +10,7 @@
             <label class="form-check-label" for="inactiveQuestions">비활성 문제</label>
           </div>
           <div class="mb-3">
-            <select style="width:150px;height:50px;" class="form-select" v-model="ChooseType" @change="TestList()">
+            <select style="width:150px;height:50px;" class="form-select" v-model="choosetype" @change="TestList()">
               <option v-for="data in type" :key="data.lec_type_id" :value="data.lec_type_id">{{ data.lec_type_name }}</option>
             </select>
           </div>
@@ -78,7 +78,7 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, nextTick } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import NewTest from './NewTest.vue';
 import UpdateTest from './UpdateTest.vue';
@@ -90,7 +90,7 @@ const TotalCnt = ref(0);
 
 const type = ref([]);
 
-const ChooseType = ref(0);
+const choosetype = ref('');
 
 const selectAll = ref(false);
 const modalBoolean = ref(false);
@@ -101,12 +101,12 @@ const checkUSE = ref(false);
 const que_id = ref(0);
 
 const TestList = (cpage) => {
- console.log('시험문제 타입 확인 ',ChooseType.value );
+ console.log('시험문제 타입 확인 ',choosetype.value );
   cpage = cpage  || 1;
   let param = new URLSearchParams();
   param.append('cpage', cpage);
   param.append('pagesize', 5);
-  param.append('lec_type_id', ChooseType.value);
+  param.append('lecList', choosetype.value);
   param.append('use_yn', checkUSE.value ? 'N' : 'Y' );
   axios.post('/tut/testListRtn.do', param).then((res) => {
     TotalCnt.value = res.data.listcnt;
@@ -120,14 +120,14 @@ const TypeList = () => {
   axios.post('/tut/testControlJson.do', param).then((res) => {
     type.value = res.data.lecList;
     const chtype = type.value.lec_type_id;
-    ChooseType.value = chtype;
+    choosetype.value = chtype;
   });
 };
 
-watch(ChooseType, () => {
-  TestList();
+// watch(choosetype, () => {
+//   TestList();
   
-});
+// });
 
 const deactivateQuestion = () => {
   const selectedQueIds = dataList.value
@@ -177,6 +177,7 @@ const toggleSelectAll = () => {
 
 onMounted(() => {
   TypeList();
+  TestList();
 });
 </script>
 

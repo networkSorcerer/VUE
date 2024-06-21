@@ -68,7 +68,7 @@ const dataList = ref([]);
 const dataList1 = ref([]);
 const totalCnt = ref(0);
 
-const ChLec = ref(0);
+const ChLec = ref('');
 
 const modalBoolean1 = ref(false);
 
@@ -76,14 +76,9 @@ const adv_id = ref(0);
 const lec_id = ref(0);
 
 const CounselList = (cpage) => {
-  console.log('확인 ',ChLec.value)
   cpage = cpage || 1;
   let param = new URLSearchParams();
-  if (ChLec.value !== 0) {
-    param.append('lec_id', ChLec.value);
-  } else {
-    param.append('lec_id', '');
-  }
+  param.append('lec_id', ChLec.value);
   param.append('cpage', cpage);
   param.append('pagesize', 5);
   axios.post('/adv/advListJson.do', param).then((res) => {
@@ -93,9 +88,7 @@ const CounselList = (cpage) => {
   });
 };
 
-watch(ChLec, () => {
-  CounselList();
-});
+
 
 const LecList = (cpage) => {
   cpage = cpage | 1;
@@ -117,6 +110,7 @@ const modalHandler1 =(param1, param2)=>{
 
 onMounted(() => {
   LecList();
+  CounselList();
 });
 </script>
 
