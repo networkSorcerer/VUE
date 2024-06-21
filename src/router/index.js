@@ -26,7 +26,7 @@ import Project from '@/views/tut/Project.vue';
 import TestControl from '@/views/tut/TestControl.vue';
 import Counseling from '@/views/tut/Counseling.vue';
 import Grade from '@/views/tut/Grade.vue';
-import Survey from '@/views/tut/Survey.vue';
+import LL from '@/views/tut/LL.vue';
 import LectureRoom from '@/views/adm/LectureRoom.vue';
 import EQList from '@/views/adm/EQList.vue';
 const routes = [
@@ -120,7 +120,7 @@ const routes = [
                     },
                     {
                         path: 't_surveyControl',
-                        component: <Survey/>
+                        component: <LL/>
                     },
                 ]
             },

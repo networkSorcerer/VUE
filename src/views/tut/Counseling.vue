@@ -16,7 +16,7 @@
             </select>
           </div>
           <div>
-            <button class="btn btn-primary" @click="modalHandler()" >상담 등록</button>
+            <button class="btn btn-primary" @click="modalHandler1()" >상담 등록</button>
           </div>
           <div>
             <table class="table">
@@ -44,17 +44,13 @@
       </div>
     </div>
   </div>
-  <NewC
-  v-if="modalBoolean"
-  @closeModal="modalBoolean = $event"
-  @closeAndSearch="modalClose"
-  />
   <CD
   v-if="modalBoolean1"
   @closeModal="modalBoolean1 = $event"
   :adv_id ="adv_id"
   :lec_id="lec_id"
-  @closeAndSearch="modalClose"
+  @closeAndSearch= "modalClose"
+  :lectureId ="lectureId"
   />
 </template>
 
@@ -62,25 +58,32 @@
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue';
 import CD from './CD.vue';
-import NewC from './NewC.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const lectureId = ref(route.params.id);
+
 
 const dataList = ref([]);
 const dataList1 = ref([]);
 const totalCnt = ref(0);
-const cpage = ref(0);
-const ChLec = ref(0);
-const currentPage = ref(0);
 
-const modalBoolean = ref(false);
+const ChLec = ref(0);
+
 const modalBoolean1 = ref(false);
 
 const adv_id = ref(0);
 const lec_id = ref(0);
 
 const CounselList = (cpage) => {
+  console.log('확인 ',ChLec.value)
   cpage = cpage || 1;
   let param = new URLSearchParams();
-  param.append('lec_id', ChLec.value);
+  if (ChLec.value !== 0) {
+    param.append('lec_id', ChLec.value);
+  } else {
+    param.append('lec_id', '');
+  }
   param.append('cpage', cpage);
   param.append('pagesize', 5);
   axios.post('/adv/advListJson.do', param).then((res) => {
@@ -101,15 +104,10 @@ const LecList = (cpage) => {
   param.append('pageSize', 999);
   axios.post('/adv/lecList2.do', param).then((res) => {
     dataList1.value = res.data.listData;
-    const select = dataList1.value.lec_id;
-    ChLec.value = select;
+  
   });
 };
 
-const modalHandler =()=>{
-  modalBoolean.value = true;
-  console.log('헬로우?????')
-} 
 const modalHandler1 =(param1, param2)=>{
   console.log('헬로우?????')
   modalBoolean1.value = true;

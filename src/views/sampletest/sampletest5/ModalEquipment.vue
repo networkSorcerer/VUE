@@ -61,7 +61,7 @@ import { onMounted, ref } from 'vue';
     
     
     const equipment = ref(new Object());
-
+    
     const updateHandler = ref(props.equipId ? 'U' : 'I');
 
     const postEquipmentDtail = () => {
