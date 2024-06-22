@@ -29,6 +29,8 @@ import Grade from '@/views/tut/Grade.vue';
 import LL from '@/views/tut/LL.vue';
 import LectureRoom from '@/views/adm/LectureRoom.vue';
 import EQList from '@/views/adm/EQList.vue';
+import Lecture from '@/views/lecture/Lecture.vue';
+
 const routes = [
     {
         path: '/',
@@ -144,6 +146,15 @@ const routes = [
                         path: 'equManagement',
                         component: <EQList/>
                     },
+                ]
+            },
+            {
+                path: 'register',
+                children : [
+                    {
+                        path: 'registerListControl',
+                        component: <Lecture/>
+                    }
                 ]
             },
         

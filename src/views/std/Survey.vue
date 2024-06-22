@@ -1,66 +1,70 @@
 <template>
   <div class="backdrop">
-    <div class="container">
+    <div class="container bg-white p-4 rounded">
       <div>
-        <div>
-          <button type="button" class="btn btn-light" @click="SubmitEvent">제출</button>
-          <button type="button" class="btn btn-light" @click="$emit('closeModal', false)">닫기</button>
+        <div class="d-flex justify-content-end mb-3">
+          <button type="button" class="btn btn-primary me-2" @click="SubmitEvent">제출</button>
+          <button type="button" class="btn btn-secondary" @click="$emit('closeModal', false)">닫기</button>
         </div>
         <div>
-          <div >
-            <table>
-              <tr>
-                <td>강의명</td>
-                <td>{{ lec_name }}</td>
-                <td>강사명</td>
-                <td>{{ tut_name }}</td>
-              </tr>
+          <div class="mb-4">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>강의명</td>
+                  <td>{{ lec_name }}</td>
+                  <td>강사명</td>
+                  <td>{{ tut_name }}</td>
+                </tr>
+              </tbody>
             </table>
-            <div >
-              <table v-for="(data, i) in dataList" :key="i">
-                <tbody>
-                  <tr>
-                    <td colspan="5" > {{ data.que }}</td>
-                  </tr>
-                  <tr >
-                    <td v-if="data.que_num === 11" colspan="5">
-                      <textarea v-model="responses['survey_review']" placeholder="의견을 입력하세요"></textarea>
-                    </td>
-                    <template v-else>
-                      <td>
-                        <label>
-                          <input type="radio"  value="1" v-model="responses['survey_answer' + i]">
-                          {{ data.que_one }}
-                        </label>
+            <div>
+              <div v-for="(data, i) in dataList" :key="i" class="mb-4">
+                <table class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td colspan="5">{{ data.que }}</td>
+                    </tr>
+                    <tr>
+                      <td v-if="data.que_num === 11" colspan="5">
+                        <textarea v-model="responses['survey_review']" class="form-control" placeholder="의견을 입력하세요"></textarea>
                       </td>
-                      <td>
-                        <label>
-                          <input type="radio"  value="2" v-model="responses['survey_answer' + i]">
-                          {{ data.que_two }}
-                        </label>
-                      </td>
-                      <td>
-                        <label>
-                          <input type="radio"  value="3" v-model="responses['survey_answer' + i]">
-                          {{ data.que_three }}
-                        </label>
-                      </td>
-                      <td>
-                        <label>
-                          <input type="radio"   value="4" v-model="responses['survey_answer' +i]">
-                          {{ data.que_four }}
-                        </label>
-                      </td>
-                      <td>
-                        <label>
-                          <input type="radio"   value="5" v-model="responses['survey_answer' + i]">
-                          {{ data.que_five }}
-                        </label>
-                      </td>
-                    </template>
-                  </tr>
-                </tbody>
-              </table>
+                      <template v-else>
+                        <td>
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="1" v-model="responses['survey_answer' + i]">
+                            {{ data.que_one }}
+                          </label>
+                        </td>
+                        <td>
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="2" v-model="responses['survey_answer' + i]">
+                            {{ data.que_two }}
+                          </label>
+                        </td>
+                        <td>
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="3" v-model="responses['survey_answer' + i]">
+                            {{ data.que_three }}
+                          </label>
+                        </td>
+                        <td>
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="4" v-model="responses['survey_answer' +i]">
+                            {{ data.que_four }}
+                          </label>
+                        </td>
+                        <td>
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="5" v-model="responses['survey_answer' + i]">
+                            {{ data.que_five }}
+                          </label>
+                        </td>
+                      </template>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -137,11 +141,12 @@ onMounted(() => {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Updated for better contrast */
 }
 .container {
   background: white;
   padding: 1.5rem;
-  height: 50%;
+  height: auto; /* Updated for dynamic content */
+  border-radius: 0.25rem; /* Bootstrap border radius */
 }
 </style>
