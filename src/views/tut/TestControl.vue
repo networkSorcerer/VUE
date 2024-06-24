@@ -78,7 +78,7 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, watch, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import Pagination from '@/components/common/PaginationComponent.vue';
 import NewTest from './NewTest.vue';
 import UpdateTest from './UpdateTest.vue';
