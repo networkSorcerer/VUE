@@ -46,6 +46,7 @@
 <script setup>
 import axios from 'axios';
 import {ref, onMounted} from 'vue';
+import { nullcheck } from '@/common/common';
 
 const emit = defineEmits(['closeAndSearch']);
 
@@ -64,6 +65,12 @@ const LRD= () => {
 };
 
 const Update = (data) => {
+    let checkresult = nullcheck([
+    {inval: dataList.lecrm_name, msg: '강의실 명을 입력해주세요'},
+    {inval: dataList.lecrm_size, msg: '강의실 명을 입력해주세요'},
+    {inval: dataList.lecrm_snum, msg: '강의실 명을 입력해주세요'},
+    ]);
+    if(!checkresult) return;
     let param = new URLSearchParams(dataList.value);
     param.append('lecrm_id', props.lecrm_id);
     param.append('action', data);

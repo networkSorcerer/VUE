@@ -42,7 +42,7 @@
             <td>{{ data.loginID }}</td>
             <td>{{ data.rv_con }}</td>
             <td>{{ data.regdate }}</td>
-            <td>
+            <td v-if="loginInfo.loginId === data.loginID">
               <button class="btn btn-link p-0 me-2" @click="startEditComment(data.rv_id, data.rv_con)">수정</button>
               <button class="btn btn-link p-0 text-danger" @click="delComment(data.rv_id)">삭제</button>
             </td>
@@ -68,6 +68,11 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import DDQ from './DDQ.vue';
+import {useStore} from 'vuex';
+
+
+const store = useStore();
+const loginInfo = store.getters.getLoginInfo;
 
 const props = defineProps({
   qna_id: Number,

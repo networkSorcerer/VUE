@@ -18,7 +18,7 @@
         </select>
       </div>
       <div> 
-        <button @click="modalHandler">문제 등록</button>
+        <button @click="modalHandler()">문제 등록</button>
       </div>
       <div> 
         <table> 
@@ -64,6 +64,8 @@
   v-if="modalBoolean"
   @closeModal="modalBoolean = $event"
   :que_id="que_id"
+  :sortList ="sortList"
+  @closeAndSearch ="modalClose"
   />
 </template>
 
@@ -131,6 +133,11 @@ const checkBoxALL = () => {
 const modalHandler = (param) =>{
   modalBoolean.value = true
   que_id.value =param
+}
+
+const modalClose = (param) =>{
+  modalBoolean.value = param;
+  TestList();
 }
 
 watch(UseOrNot , ()=>{

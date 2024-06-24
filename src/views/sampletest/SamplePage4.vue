@@ -1,9 +1,9 @@
 <template>
-    <TuList></TuList>
+    <MyLec></MyLec>
 </template>
 
 <script setup>
-import TuList from './sampletest8/TuList';
+import MyLec from './sampletest4/MyLec';
 </script>
 
 <style></style>
